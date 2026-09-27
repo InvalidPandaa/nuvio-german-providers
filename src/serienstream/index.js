@@ -20,17 +20,22 @@ async function getStreams(tmdbId, mediaType, season, episode) {
         if (!series) return [];
         const epUrl = `${BASE}${series.link}/staffel-${season}/episode-${episode}`;
         const $ = load(await getText(epUrl));
-        const links = all($, '.link-wrapper button').map(b => ({
-            url: b.attr('data-play-url'), lang: b.attr('data-language-label'),
+        // "Provider" links always answer 410
+        const links = all($, '.link-wrapper button').filter(b => b.attr('data-provider-name') !== 'Provider').map(b => ({
+            url: b.attr('data-play-url'), lang: b.attr('data-language-label'), langId: b.attr('data-language-id'),
         }));
-        // s.to shows a Turnstile captcha instead of redirecting after ~10 links per IP; those links are skipped
-        const out = await Promise.all(links.map(async l => {
-            const embed = await followRedirect(BASE + l.url, epUrl).catch(() => null);
-            return (await resolveEmbed(embed, epUrl)).map(s => ({
-                name: 'Serienstream', title: `${s.host} · ${l.lang}`, url: s.url, quality: s.quality, headers: s.headers,
+        // s.to shows a captcha instead of redirecting after ~10 links per IP, so spend links on German first
+        // (1 = Deutsch, 3 = Ger-Sub, 2 = Englisch) and only fall back to the next language if nothing played
+        for (const langId of ['1', '3', '2']) {
+            const out = await Promise.all(links.filter(l => l.langId === langId).map(async l => {
+                const embed = await followRedirect(BASE + l.url, epUrl).catch(() => null);
+                return (await resolveEmbed(embed, epUrl)).map(s => ({
+                    name: 'Serienstream', title: `${s.host} · ${l.lang}`, url: s.url, quality: s.quality, headers: s.headers,
+                }));
             }));
-        }));
-        return [].concat(...out);
+            const streams = [].concat(...out);
+            if (streams.length) return streams;
+        }
     } catch (e) {
         console.error(`[Serienstream] ${e.message}`);
     }

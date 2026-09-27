@@ -15,11 +15,13 @@ export function send(url, opts) {
 
 export function provider(getStreams) {
     return {
-        async getStreams(...args) {
+        async getStreams(tmdbId, mediaType, season, episode) {
             deadline = Date.now() + DEADLINE_MS;
+            // Nuvio's "Test provider" passes 'series' where playback passes 'tv'
+            if (mediaType !== 'movie') mediaType = 'tv';
             let streams = [];
             try {
-                streams = (await getStreams(...args)) || [];
+                streams = (await getStreams(tmdbId, mediaType, season, episode)) || [];
             } catch (e) {
                 console.error(e.message);
             }

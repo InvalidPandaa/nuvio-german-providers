@@ -41,12 +41,13 @@ function send(url, opts) {
 }
 function provider(getStreams2) {
   return {
-    getStreams(...args) {
+    getStreams(tmdbId, mediaType, season, episode) {
       return __async(this, null, function* () {
         deadline = Date.now() + DEADLINE_MS;
+        if (mediaType !== "movie") mediaType = "tv";
         let streams = [];
         try {
-          streams = (yield getStreams2(...args)) || [];
+          streams = (yield getStreams2(tmdbId, mediaType, season, episode)) || [];
         } catch (e) {
           console.error(e.message);
         }
@@ -413,21 +414,25 @@ function getStreams(tmdbId, mediaType, season, episode) {
       if (!series) return [];
       const epUrl = `${BASE}${series.link}/staffel-${season}/episode-${episode}`;
       const $ = load(yield getText(epUrl));
-      const links = all($, ".link-wrapper button").map((b) => ({
+      const links = all($, ".link-wrapper button").filter((b) => b.attr("data-provider-name") !== "Provider").map((b) => ({
         url: b.attr("data-play-url"),
-        lang: b.attr("data-language-label")
+        lang: b.attr("data-language-label"),
+        langId: b.attr("data-language-id")
       }));
-      const out = yield Promise.all(links.map((l) => __async(null, null, function* () {
-        const embed = yield followRedirect(BASE + l.url, epUrl).catch(() => null);
-        return (yield resolveEmbed(embed, epUrl)).map((s) => ({
-          name: "Serienstream",
-          title: `${s.host} \xB7 ${l.lang}`,
-          url: s.url,
-          quality: s.quality,
-          headers: s.headers
-        }));
-      })));
-      return [].concat(...out);
+      for (const langId of ["1", "3", "2"]) {
+        const out = yield Promise.all(links.filter((l) => l.langId === langId).map((l) => __async(null, null, function* () {
+          const embed = yield followRedirect(BASE + l.url, epUrl).catch(() => null);
+          return (yield resolveEmbed(embed, epUrl)).map((s) => ({
+            name: "Serienstream",
+            title: `${s.host} \xB7 ${l.lang}`,
+            url: s.url,
+            quality: s.quality,
+            headers: s.headers
+          }));
+        })));
+        const streams = [].concat(...out);
+        if (streams.length) return streams;
+      }
     } catch (e) {
       console.error(`[Serienstream] ${e.message}`);
     }

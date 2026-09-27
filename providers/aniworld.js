@@ -41,12 +41,13 @@ function send(url, opts) {
 }
 function provider(getStreams2) {
   return {
-    getStreams(...args) {
+    getStreams(tmdbId, mediaType, season, episode) {
       return __async(this, null, function* () {
         deadline = Date.now() + DEADLINE_MS;
+        if (mediaType !== "movie") mediaType = "tv";
         let streams = [];
         try {
-          streams = (yield getStreams2(...args)) || [];
+          streams = (yield getStreams2(tmdbId, mediaType, season, episode)) || [];
         } catch (e) {
           console.error(e.message);
         }
