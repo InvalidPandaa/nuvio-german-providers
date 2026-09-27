@@ -1,4 +1,4 @@
-import { getText, getJson } from '../../shared/http.js';
+import { getText, getJson, provider } from '../../shared/http.js';
 
 const BASE = 'https://www.southpark.de';
 const TOPAZ = 'https://topaz.paramount.tech/topaz/api';
@@ -37,4 +37,4 @@ async function getStreams(tmdbId, mediaType, season, episode) {
     return [];
 }
 
-module.exports = { getStreams };
+module.exports = provider(getStreams);

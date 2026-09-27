@@ -1,4 +1,4 @@
-import { getText } from '../../shared/http.js';
+import { getText, provider } from '../../shared/http.js';
 import { getMeta } from '../../shared/tmdb.js';
 import { pickBest } from '../../shared/match.js';
 import { load, all } from '../../shared/dom.js';
@@ -69,4 +69,4 @@ async function getStreams(tmdbId, mediaType, season, episode) {
     return [];
 }
 
-module.exports = { getStreams };
+module.exports = provider(getStreams);

@@ -9,6 +9,14 @@ const fs = require('fs');
 const keyFile = path.join(__dirname, '.tmdb_key');
 globalThis.TMDB_API_KEY = process.env.TMDB_API_KEY || (fs.existsSync(keyFile) ? fs.readFileSync(keyFile, 'utf8').trim() : undefined);
 
+// Nuvio (iOS/Android mobile) closes its QuickJS runtime as soon as getStreams settles; a fetch still in flight then crashes the app.
+let inFlight = 0;
+const nativeFetch = globalThis.fetch;
+globalThis.fetch = (...args) => {
+    inFlight++;
+    return nativeFetch(...args).finally(() => inFlight--);
+};
+
 async function probe(s) {
     try {
         const res = await fetch(s.url, { headers: Object.assign({ Range: 'bytes=0-2047' }, s.headers) });
@@ -32,10 +40,11 @@ async function main() {
         const [tmdbId, type, s, e] = rest;
         const { getStreams } = require(path.join(__dirname, 'providers', `${a}.js`));
         streams = await getStreams(tmdbId, type || 'movie', s ? Number(s) : null, e ? Number(e) : null);
+        if (inFlight) console.log(`CRASH-RISK: ${inFlight} fetch(es) still running when getStreams returned`);
     }
     for (const s of streams) console.log(`${await probe(s)}\n  ${JSON.stringify(s)}`);
     console.log(`${streams.length} stream(s)`);
-    process.exitCode = streams.length ? 0 : 1;
+    process.exitCode = streams.length && !inFlight ? 0 : 1;
 }
 
 main().catch(e => { console.error(e); process.exitCode = 1; });

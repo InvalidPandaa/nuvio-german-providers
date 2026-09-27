@@ -1,5 +1,5 @@
 // Ports of the CloudStream core extractors GermanProviders relies on. Each: (url, referer) -> [{url, quality, headers}]
-import { getJson, getText, postForm, postJson, UA } from '../http.js';
+import { getJson, getText, postForm, postJson, UA, send } from '../http.js';
 import { fetchPage, jwplayer, origin, quality, scripts, unpack } from './util.js';
 
 const CryptoJS = require('crypto-js');
@@ -31,7 +31,7 @@ export async function voe(url, referer) {
 
 export async function dood(url) {
     const embed = url.replace('/d/', '/e/');
-    const res = await fetch(embed, { headers: { 'User-Agent': UA } });
+    const res = await send(embed, { headers: { 'User-Agent': UA } });
     const html = await res.text();
     const host = origin(res.url || embed);
     const pass = (html.match(/\/pass_md5\/[^']*/) || [])[0];

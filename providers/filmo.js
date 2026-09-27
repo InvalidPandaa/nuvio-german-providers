@@ -21,9 +21,44 @@ var __async = (__this, __arguments, generator) => {
 
 // shared/http.js
 var UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+var DEADLINE_MS = 4e4;
+var running = 0;
+var idle = [];
+var deadline = Infinity;
+function send(url, opts) {
+  if (Date.now() > deadline) return Promise.reject(new Error(`deadline reached, skipped ${url}`));
+  running++;
+  const done = () => {
+    if (--running === 0) idle.splice(0).forEach((resolve) => resolve());
+  };
+  return fetch(url, opts).then((res) => {
+    done();
+    return res;
+  }, (err) => {
+    done();
+    throw err;
+  });
+}
+function provider(getStreams2) {
+  return {
+    getStreams(...args) {
+      return __async(this, null, function* () {
+        deadline = Date.now() + DEADLINE_MS;
+        let streams = [];
+        try {
+          streams = (yield getStreams2(...args)) || [];
+        } catch (e) {
+          console.error(e.message);
+        }
+        if (running) yield new Promise((resolve) => idle.push(resolve));
+        return streams;
+      });
+    }
+  };
+}
 function request(_0) {
   return __async(this, arguments, function* (url, opts = {}) {
-    const res = yield fetch(url, Object.assign({}, opts, { headers: Object.assign({ "User-Agent": UA }, opts.headers) }));
+    const res = yield send(url, Object.assign({}, opts, { headers: Object.assign({ "User-Agent": UA }, opts.headers) }));
     if (!res.ok) throw new Error(`HTTP ${res.status} ${url}`);
     return res;
   });
@@ -180,7 +215,7 @@ function voe(url, referer) {
 function dood(url) {
   return __async(this, null, function* () {
     const embed = url.replace("/d/", "/e/");
-    const res = yield fetch(embed, { headers: { "User-Agent": UA } });
+    const res = yield send(embed, { headers: { "User-Agent": UA } });
     const html = yield res.text();
     const host = origin(res.url || embed);
     const pass = (html.match(/\/pass_md5\/[^']*/) || [])[0];
@@ -366,7 +401,7 @@ function embedUrl(payload, cookies) {
       body: JSON.stringify({ p: payload }),
       headers: Object.assign({ "Content-Type": "application/json", "X-XSRF-TOKEN": decodeURIComponent(cookies["XSRF-TOKEN"] || "") }, headers)
     })).x;
-    const res = yield fetch(`${BASE}/n/${slug}`, { headers, redirect: "manual" });
+    const res = yield send(`${BASE}/n/${slug}`, { headers, redirect: "manual" });
     if (res.status >= 300 && res.status < 400) return res.headers.get("location");
     return ((yield res.text()).match(/<a class="open" href="([^"]+)"/) || [])[1];
   });
@@ -411,4 +446,4 @@ function getStreams(tmdbId, mediaType) {
     return [];
   });
 }
-module.exports = { getStreams };
+module.exports = provider(getStreams);

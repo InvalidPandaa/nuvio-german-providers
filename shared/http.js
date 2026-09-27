@@ -1,7 +1,36 @@
 export const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
+// Nuvio on iOS closes the QuickJS runtime as soon as getStreams settles (or after its 60 s timeout); a fetch still
+// in flight at that moment aborts the whole app. So every request goes through send(), and provider() only
+// answers once none is running. After DEADLINE_MS no new request starts, to stay clear of Nuvio's timeout.
+const DEADLINE_MS = 40000;
+let running = 0, idle = [], deadline = Infinity;
+
+export function send(url, opts) {
+    if (Date.now() > deadline) return Promise.reject(new Error(`deadline reached, skipped ${url}`));
+    running++;
+    const done = () => { if (--running === 0) idle.splice(0).forEach(resolve => resolve()); };
+    return fetch(url, opts).then(res => { done(); return res; }, err => { done(); throw err; });
+}
+
+export function provider(getStreams) {
+    return {
+        async getStreams(...args) {
+            deadline = Date.now() + DEADLINE_MS;
+            let streams = [];
+            try {
+                streams = (await getStreams(...args)) || [];
+            } catch (e) {
+                console.error(e.message);
+            }
+            if (running) await new Promise(resolve => idle.push(resolve));
+            return streams;
+        },
+    };
+}
+
 export async function request(url, opts = {}) {
-    const res = await fetch(url, Object.assign({}, opts, { headers: Object.assign({ 'User-Agent': UA }, opts.headers) }));
+    const res = await send(url, Object.assign({}, opts, { headers: Object.assign({ 'User-Agent': UA }, opts.headers) }));
     if (!res.ok) throw new Error(`HTTP ${res.status} ${url}`);
     return res;
 }

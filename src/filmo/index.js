@@ -1,4 +1,4 @@
-import { getText, request, UA } from '../../shared/http.js';
+import { getText, request, UA, send, provider } from '../../shared/http.js';
 import { getMeta } from '../../shared/tmdb.js';
 import { norm, pickBest } from '../../shared/match.js';
 import { load, all } from '../../shared/dom.js';
@@ -24,7 +24,7 @@ async function embedUrl(payload, cookies) {
         body: JSON.stringify({ p: payload }),
         headers: Object.assign({ 'Content-Type': 'application/json', 'X-XSRF-TOKEN': decodeURIComponent(cookies['XSRF-TOKEN'] || '') }, headers),
     })).x;
-    const res = await fetch(`${BASE}/n/${slug}`, { headers, redirect: 'manual' });
+    const res = await send(`${BASE}/n/${slug}`, { headers, redirect: 'manual' });
     if (res.status >= 300 && res.status < 400) return res.headers.get('location');
     return ((await res.text()).match(/<a class="open" href="([^"]+)"/) || [])[1];
 }
@@ -72,4 +72,4 @@ async function getStreams(tmdbId, mediaType) {
     return [];
 }
 
-module.exports = { getStreams };
+module.exports = provider(getStreams);

@@ -1,9 +1,9 @@
-import { getText, UA } from '../../shared/http.js';
+import { getText, UA, send } from '../../shared/http.js';
 import { score } from '../../shared/match.js';
 
 // Aniworld and Serienstream both hide hosters behind a 30x redirect; read Location instead of loading the hoster page
 export async function followRedirect(url, referer) {
-    const res = await fetch(url, { redirect: 'manual', headers: { 'User-Agent': UA, Referer: referer } });
+    const res = await send(url, { redirect: 'manual', headers: { 'User-Agent': UA, Referer: referer } });
     const loc = res.headers.get('location');
     return loc || (res.url !== url && res.ok ? res.url : null);
 }

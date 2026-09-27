@@ -1,4 +1,4 @@
-import { getJson } from '../../shared/http.js';
+import { getJson, provider } from '../../shared/http.js';
 import { resolveEmbed } from '../../shared/extractors/index.js';
 
 const BASE = 'https://einschalten.in';
@@ -22,4 +22,4 @@ async function getStreams(tmdbId, mediaType) {
     return [];
 }
 
-module.exports = { getStreams };
+module.exports = provider(getStreams);
