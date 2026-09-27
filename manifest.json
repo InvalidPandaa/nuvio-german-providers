@@ -1,0 +1,517 @@
+{
+  "name": "German Providers",
+  "version": "1.0.0",
+  "description": "Deutsche Quellen für Nuvio – portiert von Bnyro/GermanProviders (CloudStream)",
+  "author": "InvalidPandaa",
+  "scrapers": [
+    {
+      "id": "netzkino",
+      "name": "Netzkino",
+      "description": "Kostenlose Filme von Netzkino.de",
+      "version": "1.0.0",
+      "filename": "providers/netzkino.js",
+      "supportedTypes": [
+        "movie"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=netzkino.de&sz=128"
+    },
+    {
+      "id": "ard",
+      "name": "ARD Mediathek",
+      "description": "Filme und Serien aus der ARD Mediathek – kostenlos, direkte HLS/MP4-Streams. FSK16+-Inhalte nur 22–6 Uhr.",
+      "version": "1.0.0",
+      "filename": "providers/ard.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=ardmediathek.de&sz=128"
+    },
+    {
+      "id": "welt",
+      "name": "Welt",
+      "description": "Dokumentationen und Reportagen aus der WELT-Mediathek (Einzeldokus, die auf TMDB als Film gelistet sind)",
+      "version": "1.0.0",
+      "filename": "providers/welt.js",
+      "supportedTypes": [
+        "movie"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=welt.de&sz=128"
+    },
+    {
+      "id": "plutotv",
+      "name": "PlutoTV",
+      "description": "Kostenlose Filme und Serien auf Abruf von Pluto TV (deutsche Region)",
+      "version": "1.0.0",
+      "filename": "providers/plutotv.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=pluto.tv&sz=128"
+    },
+    {
+      "id": "arte",
+      "name": "Arte",
+      "description": "Filme und Serien aus der ARTE-Mediathek (deutsche Fassung, weitere Sprachversionen wie OmU gekennzeichnet)",
+      "version": "1.0.0",
+      "filename": "providers/arte.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=arte.tv&sz=128"
+    },
+    {
+      "id": "filmfrei24",
+      "name": "FilmFrei24",
+      "description": "Kostenlose Filme und Serien auf Deutsch von FilmFrei24 (direkte HLS/MP4-Streams)",
+      "version": "1.0.0",
+      "filename": "providers/filmfrei24.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=filmfrei24.com&sz=128"
+    },
+    {
+      "id": "filmo",
+      "name": "Filmo",
+      "description": "Filme auf Deutsch von Filmo.to (VOE und weitere Hoster)",
+      "version": "1.0.0",
+      "filename": "providers/filmo.js",
+      "supportedTypes": [
+        "movie"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=filmo.to&sz=128"
+    },
+    {
+      "id": "flixitv",
+      "name": "FlixiTV",
+      "description": "Klassische Filme und Serien auf Deutsch von FlixiTV (direkte MP4-Streams)",
+      "version": "1.0.0",
+      "filename": "providers/flixitv.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=flixitv-stream.eu&sz=128"
+    },
+    {
+      "id": "serienstream",
+      "name": "Serienstream",
+      "description": "Serien auf Deutsch und im Original von SerienStream (s.to)",
+      "version": "1.0.0",
+      "filename": "providers/serienstream.js",
+      "supportedTypes": [
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=serienstream.to&sz=128"
+    },
+    {
+      "id": "aniworld",
+      "name": "Aniworld",
+      "description": "Anime-Serien und -Filme auf Deutsch, mit deutschen oder englischen Untertiteln von AniWorld",
+      "version": "1.0.0",
+      "filename": "providers/aniworld.js",
+      "supportedTypes": [
+        "tv",
+        "movie"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=aniworld.to&sz=128"
+    },
+    {
+      "id": "dmax",
+      "name": "DMAX",
+      "description": "Doku-Serien aus der DMAX Mediathek – kostenlos, HLS ohne DRM",
+      "version": "1.0.0",
+      "filename": "providers/dmax.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=dmax.de&sz=128"
+    },
+    {
+      "id": "tele5",
+      "name": "TELE 5",
+      "description": "Filme und Serien aus der TELE 5 Mediathek – kostenlos, HLS ohne DRM",
+      "version": "1.0.0",
+      "filename": "providers/tele5.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=tele5.de&sz=128"
+    },
+    {
+      "id": "tlc",
+      "name": "TLC",
+      "description": "Reality- und Doku-Serien aus der TLC Mediathek – kostenlos, HLS ohne DRM",
+      "version": "1.0.0",
+      "filename": "providers/tlc.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=tlc.de&sz=128"
+    },
+    {
+      "id": "southpark",
+      "name": "South Park",
+      "description": "Alle frei verfügbaren South-Park-Folgen von southpark.de – Deutsch und Englisch",
+      "version": "1.0.0",
+      "filename": "providers/southpark.js",
+      "supportedTypes": [
+        "tv"
+      ],
+      "contentLanguage": [
+        "de",
+        "en"
+      ],
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=southpark.de&sz=128"
+    },
+    {
+      "id": "moflix",
+      "name": "Moflix",
+      "description": "Filme & Serien von moflix-stream.xyz (Deutsch, eigene HLS-Streams + Hoster)",
+      "version": "1.0.0",
+      "filename": "providers/moflix.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=moflix-stream.xyz&sz=128"
+    },
+    {
+      "id": "huhuto",
+      "name": "Huhu",
+      "description": "Filme & Serien von huhu.to (Deutsch und weitere Sprachen, VOE u. a.)",
+      "version": "1.0.0",
+      "filename": "providers/huhuto.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=huhu.to&sz=128"
+    },
+    {
+      "id": "einschaltenin",
+      "name": "EinschaltenIn",
+      "description": "Filme von einschalten.in – nur Dood-Hoster, die meist hinter einem Cloudflare-Check liegen (daher standardmäßig aus)",
+      "version": "1.0.0",
+      "filename": "providers/einschaltenin.js",
+      "supportedTypes": [
+        "movie"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "mp4"
+      ],
+      "enabled": false,
+      "limited": true,
+      "logo": "https://www.google.com/s2/favicons?domain=einschalten.in&sz=128"
+    },
+    {
+      "id": "filmpalast",
+      "name": "FilmPalast",
+      "description": "Filme und Serien von Filmpalast.to (VOE, FireStream, Vidara, VidSonic)",
+      "version": "1.0.0",
+      "filename": "providers/filmpalast.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=filmpalast.to&sz=128"
+    },
+    {
+      "id": "megakino",
+      "name": "Megakino",
+      "description": "Filme und Serien von Megakino (Domain wird automatisch ermittelt)",
+      "version": "1.0.0",
+      "filename": "providers/megakino.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=megakino21.com&sz=128"
+    },
+    {
+      "id": "hdfilme",
+      "name": "HDFilme",
+      "description": "Filme von HDFilme (über meinecloud.click, IMDb-basiert)",
+      "version": "1.0.0",
+      "filename": "providers/hdfilme.js",
+      "supportedTypes": [
+        "movie"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=hdfilme.cafe&sz=128"
+    },
+    {
+      "id": "kinoking",
+      "name": "KinoKing",
+      "description": "Filme und Serien auf Deutsch von KinoKing (VOE, Vidara, VidSonic u. a.)",
+      "version": "1.0.0",
+      "filename": "providers/kinoking.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=kinoking.cc&sz=128"
+    },
+    {
+      "id": "kellerkino",
+      "name": "KellerKino",
+      "description": "Filme auf Deutsch von KellerKino",
+      "version": "1.0.0",
+      "filename": "providers/kellerkino.js",
+      "supportedTypes": [
+        "movie"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=kellerkino.com&sz=128"
+    },
+    {
+      "id": "kinoger",
+      "name": "Kinoger",
+      "description": "Filme und Serien auf Deutsch von Kinoger – liegt hinter Cloudflare, funktioniert nur in Netzen ohne Browser-Check (daher standardmäßig aus)",
+      "version": "1.0.0",
+      "filename": "providers/kinoger.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "enabled": false,
+      "limited": true,
+      "logo": "https://www.google.com/s2/favicons?domain=kinoger.com&sz=128"
+    },
+    {
+      "id": "movie4k",
+      "name": "Movie4k",
+      "description": "Filme und Serien auf Deutsch von movie4k.sx (XCine-Netzwerk) – Backend war beim Portieren offline, daher standardmäßig aus",
+      "version": "1.0.0",
+      "filename": "providers/movie4k.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "enabled": false,
+      "limited": true,
+      "logo": "https://www.google.com/s2/favicons?domain=movie4k.sx&sz=128"
+    },
+    {
+      "id": "streamcloud",
+      "name": "Streamcloud",
+      "description": "Filme und Serien auf Deutsch von streamcloud.sx (XCine-Netzwerk) – Backend war beim Portieren offline, daher standardmäßig aus",
+      "version": "1.0.0",
+      "filename": "providers/streamcloud.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "enabled": false,
+      "limited": true,
+      "logo": "https://www.google.com/s2/favicons?domain=streamcloud.sx&sz=128"
+    },
+    {
+      "id": "kinokisteclub",
+      "name": "KinoKiste",
+      "description": "Filme und Serien auf Deutsch von kinokiste.club (XCine-Netzwerk) – Backend war beim Portieren offline, daher standardmäßig aus",
+      "version": "1.0.0",
+      "filename": "providers/kinokisteclub.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "enabled": false,
+      "limited": true,
+      "logo": "https://www.google.com/s2/favicons?domain=kinokiste.club&sz=128"
+    },
+    {
+      "id": "xcineru",
+      "name": "XcineRU",
+      "description": "Filme und Serien auf Deutsch von xcine.ru (XCine-Netzwerk) – Backend war beim Portieren offline, daher standardmäßig aus",
+      "version": "1.0.0",
+      "filename": "providers/xcineru.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "contentLanguage": [
+        "de"
+      ],
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "enabled": false,
+      "limited": true,
+      "logo": "https://www.google.com/s2/favicons?domain=xcine.ru&sz=128"
+    }
+  ]
+}
