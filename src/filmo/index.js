@@ -24,7 +24,8 @@ async function embedUrl(payload, cookies) {
         body: JSON.stringify({ p: payload }),
         headers: Object.assign({ 'Content-Type': 'application/json', 'X-XSRF-TOKEN': decodeURIComponent(cookies['XSRF-TOKEN'] || '') }, headers),
     })).x;
-    const res = await send(`${BASE}/n/${slug}`, { headers, redirect: 'manual' });
+    // empty gzip-encoded 30x bodies break OkHttp in Nuvio, see serienstream/common.js
+    const res = await send(`${BASE}/n/${slug}`, { headers: Object.assign({ 'Accept-Encoding': 'identity' }, headers), redirect: 'manual' });
     if (res.status >= 300 && res.status < 400) return res.headers.get('location');
     return ((await res.text()).match(/<a class="open" href="([^"]+)"/) || [])[1];
 }

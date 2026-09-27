@@ -39,6 +39,21 @@ function send(url, opts) {
     throw err;
   });
 }
+var LANGS = [
+  [/ger-?sub/i, "Ger-Sub"],
+  [/eng-?sub/i, "Eng-Sub"],
+  [/\bomu\b/i, "OmU"],
+  [/\bov\b/i, "OV"],
+  [/englisch|\ben\b/i, "Englisch"],
+  [/franz|\bfr\b/i, "Franz\xF6sisch"],
+  [/deutsch|\bde\b/i, "Deutsch"]
+];
+function decorate(s) {
+  const lang = (LANGS.find(([re]) => re.test(s.title || "")) || [])[1] || "Deutsch";
+  const quality2 = s.quality && s.quality !== "auto" ? s.quality : /\.m3u8|\/hls|master/i.test(s.url) ? "HLS" : "MP4";
+  const host = ((s.title || "").split(" \xB7 ")[0].match(/^[\w-]+\.[a-z]{2,}$/) || [])[0];
+  return Object.assign({}, s, { name: [s.name, lang, host].filter(Boolean).join(" \xB7 "), quality: quality2 });
+}
 function provider(getStreams2) {
   return {
     getStreams(tmdbId, mediaType, season, episode) {
@@ -52,7 +67,7 @@ function provider(getStreams2) {
           console.error(e.message);
         }
         if (running) yield new Promise((resolve) => idle.push(resolve));
-        return streams;
+        return streams.map(decorate);
       });
     }
   };
@@ -402,7 +417,7 @@ function embedUrl(payload, cookies) {
       body: JSON.stringify({ p: payload }),
       headers: Object.assign({ "Content-Type": "application/json", "X-XSRF-TOKEN": decodeURIComponent(cookies["XSRF-TOKEN"] || "") }, headers)
     })).x;
-    const res = yield send(`${BASE}/n/${slug}`, { headers, redirect: "manual" });
+    const res = yield send(`${BASE}/n/${slug}`, { headers: Object.assign({ "Accept-Encoding": "identity" }, headers), redirect: "manual" });
     if (res.status >= 300 && res.status < 400) return res.headers.get("location");
     return ((yield res.text()).match(/<a class="open" href="([^"]+)"/) || [])[1];
   });

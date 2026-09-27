@@ -39,6 +39,21 @@ function send(url, opts) {
     throw err;
   });
 }
+var LANGS = [
+  [/ger-?sub/i, "Ger-Sub"],
+  [/eng-?sub/i, "Eng-Sub"],
+  [/\bomu\b/i, "OmU"],
+  [/\bov\b/i, "OV"],
+  [/englisch|\ben\b/i, "Englisch"],
+  [/franz|\bfr\b/i, "Franz\xF6sisch"],
+  [/deutsch|\bde\b/i, "Deutsch"]
+];
+function decorate(s) {
+  const lang = (LANGS.find(([re]) => re.test(s.title || "")) || [])[1] || "Deutsch";
+  const quality = s.quality && s.quality !== "auto" ? s.quality : /\.m3u8|\/hls|master/i.test(s.url) ? "HLS" : "MP4";
+  const host = ((s.title || "").split(" \xB7 ")[0].match(/^[\w-]+\.[a-z]{2,}$/) || [])[0];
+  return Object.assign({}, s, { name: [s.name, lang, host].filter(Boolean).join(" \xB7 "), quality });
+}
 function provider(getStreams2) {
   return {
     getStreams(tmdbId, mediaType, season, episode) {
@@ -52,7 +67,7 @@ function provider(getStreams2) {
           console.error(e.message);
         }
         if (running) yield new Promise((resolve) => idle.push(resolve));
-        return streams;
+        return streams.map(decorate);
       });
     }
   };
@@ -131,7 +146,7 @@ function pickBest(items, meta) {
 // src/ard/index.js
 var API = "https://api.ardmediathek.de";
 var ACCESSIBLE = /Audiodeskription|Gebärdensprache|Klare Sprache/i;
-var LANGS = { deu: "Deutsch", eng: "Englisch", fra: "Franz\xF6sisch", ov: "OV" };
+var LANGS2 = { deu: "Deutsch", eng: "Englisch", fra: "Franz\xF6sisch", ov: "OV" };
 var title = (t) => (t.shortTitle || t.longTitle || t.title || "").trim();
 var targetId = (t) => ((t.links || {}).target || {}).id || t.id;
 var search = (kind, q) => getJson(`${API}/search-system/search/${kind}/ard?query=${encodeURIComponent(q)}&pageSize=30&platform=MEDIA_THEK&sortingCriteria=SCORE_DESC`).then((r) => r.teasers || []);
@@ -218,7 +233,7 @@ function streamsOf(teaser) {
       const lang = ((m.audios || [])[0] || {}).languageCode;
       return {
         name: "ARD",
-        title: [title(teaser), LANGS[lang] || lang, m.forcedLabel, hls ? "HLS" : "MP4"].filter(Boolean).join(" \xB7 "),
+        title: [title(teaser), LANGS2[lang] || lang, m.forcedLabel, hls ? "HLS" : "MP4"].filter(Boolean).join(" \xB7 "),
         url: m.url.startsWith("//") ? "https:" + m.url : m.url,
         quality: hls ? "auto" : m.maxVResolutionPx ? `${m.maxVResolutionPx}p` : "auto",
         res: hls ? 1e5 : m.maxVResolutionPx || 0

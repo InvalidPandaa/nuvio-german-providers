@@ -1,9 +1,11 @@
 import { getText, UA, send } from '../../shared/http.js';
 import { score } from '../../shared/match.js';
 
-// Aniworld and Serienstream both hide hosters behind a 30x redirect; read Location instead of loading the hoster page
+// Aniworld and Serienstream both hide hosters behind a 30x redirect; read Location instead of loading the hoster page.
+// aniworld answers that 301 with "content-encoding: gzip" and an empty body, which OkHttp (Nuvio desktop/Android)
+// fails to gunzip (EOFException), so ask for an unencoded response.
 export async function followRedirect(url, referer) {
-    const res = await send(url, { redirect: 'manual', headers: { 'User-Agent': UA, Referer: referer } });
+    const res = await send(url, { redirect: 'manual', headers: { 'User-Agent': UA, Referer: referer, 'Accept-Encoding': 'identity' } });
     const loc = res.headers.get('location');
     return loc || (res.url !== url && res.ok ? res.url : null);
 }

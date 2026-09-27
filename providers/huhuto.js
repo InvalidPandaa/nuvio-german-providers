@@ -39,6 +39,21 @@ function send(url, opts) {
     throw err;
   });
 }
+var LANGS = [
+  [/ger-?sub/i, "Ger-Sub"],
+  [/eng-?sub/i, "Eng-Sub"],
+  [/\bomu\b/i, "OmU"],
+  [/\bov\b/i, "OV"],
+  [/englisch|\ben\b/i, "Englisch"],
+  [/franz|\bfr\b/i, "Franz\xF6sisch"],
+  [/deutsch|\bde\b/i, "Deutsch"]
+];
+function decorate(s) {
+  const lang = (LANGS.find(([re]) => re.test(s.title || "")) || [])[1] || "Deutsch";
+  const quality2 = s.quality && s.quality !== "auto" ? s.quality : /\.m3u8|\/hls|master/i.test(s.url) ? "HLS" : "MP4";
+  const host = ((s.title || "").split(" \xB7 ")[0].match(/^[\w-]+\.[a-z]{2,}$/) || [])[0];
+  return Object.assign({}, s, { name: [s.name, lang, host].filter(Boolean).join(" \xB7 "), quality: quality2 });
+}
 function provider(getStreams2) {
   return {
     getStreams(tmdbId, mediaType, season, episode) {
@@ -52,7 +67,7 @@ function provider(getStreams2) {
           console.error(e.message);
         }
         if (running) yield new Promise((resolve2) => idle.push(resolve2));
-        return streams;
+        return streams.map(decorate);
       });
     }
   };
