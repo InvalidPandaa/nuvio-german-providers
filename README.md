@@ -14,7 +14,7 @@ auf allen Plattformen: Android, Android TV, iOS, macOS, Windows.
 In Nuvio in den Plugin-Einstellungen ein Repository mit der **rohen** URL der `manifest.json` hinzufügen:
 
 ```
-https://raw.githubusercontent.com/InvalidPandaa/nuvio-german-providers/main/manifest.json
+https://invalidpandaa.github.io/nuvio-german-providers/manifest.json
 ```
 
 
