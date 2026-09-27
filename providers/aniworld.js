@@ -386,9 +386,8 @@ function resolveEmbed(url, referer) {
 // src/serienstream/common.js
 function followRedirect(url, referer) {
   return __async(this, null, function* () {
-    const res = yield send(url, { redirect: "manual", headers: { "User-Agent": UA, Referer: referer, "Accept-Encoding": "identity" } });
-    const loc = res.headers.get("location");
-    return loc || (res.url !== url && res.ok ? res.url : null);
+    const res = yield send(url, { headers: { "User-Agent": UA, Referer: referer } });
+    return res.url && res.url !== url ? res.url : null;
   });
 }
 function pickSeries(items, meta, base) {

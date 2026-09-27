@@ -417,8 +417,9 @@ function embedUrl(payload, cookies) {
       body: JSON.stringify({ p: payload }),
       headers: Object.assign({ "Content-Type": "application/json", "X-XSRF-TOKEN": decodeURIComponent(cookies["XSRF-TOKEN"] || "") }, headers)
     })).x;
-    const res = yield send(`${BASE}/n/${slug}`, { headers: Object.assign({ "Accept-Encoding": "identity" }, headers), redirect: "manual" });
-    if (res.status >= 300 && res.status < 400) return res.headers.get("location");
+    const url = `${BASE}/n/${slug}`;
+    const res = yield send(url, { headers });
+    if (res.url && res.url !== url) return res.url;
     return ((yield res.text()).match(/<a class="open" href="([^"]+)"/) || [])[1];
   });
 }

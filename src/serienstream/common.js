@@ -1,13 +1,12 @@
 import { getText, UA, send } from '../../shared/http.js';
 import { score } from '../../shared/match.js';
 
-// Aniworld and Serienstream both hide hosters behind a 30x redirect; read Location instead of loading the hoster page.
-// aniworld answers that 301 with "content-encoding: gzip" and an empty body, which OkHttp (Nuvio desktop/Android)
-// fails to gunzip (EOFException), so ask for an unencoded response.
+// Aniworld and Serienstream hide hosters behind a 30x redirect. Let the client follow it and take the final URL:
+// aniworld sends that 301 with "content-encoding: gzip" and an empty body, which OkHttp (Nuvio desktop/Android)
+// can only survive by not reading it, and Nuvio strips any Accept-Encoding a plugin sets (iOS ignores manual redirects anyway).
 export async function followRedirect(url, referer) {
-    const res = await send(url, { redirect: 'manual', headers: { 'User-Agent': UA, Referer: referer, 'Accept-Encoding': 'identity' } });
-    const loc = res.headers.get('location');
-    return loc || (res.url !== url && res.ok ? res.url : null);
+    const res = await send(url, { headers: { 'User-Agent': UA, Referer: referer } });
+    return res.url && res.url !== url ? res.url : null;
 }
 
 // exact title matches only; several (remakes, same-name shows) -> the one whose page links the TMDB IMDb id
