@@ -9,6 +9,10 @@ export function aurora({ name, mainUrl, serviceIdentifier, mediathekSlug, apiTok
     const env = `filter%5Benvironment%5D=${serviceIdentifier}&v=2&include=default`;
 
     async function findPage(meta) {
+        // the tagline can also sit on the TMDB side only ("Steel Buddies – Stahlharte Geschäfte" vs. the site's "Steel Buddies"),
+        // so every tagline-separated part of a TMDB title counts as a title of its own
+        const parts = [].concat(...meta.titles.map(t => t.split(/ [-–:] |: /))).map(p => p.trim()).filter(p => p.length > 3);
+        meta = Object.assign({}, meta, { titles: meta.titles.concat(parts).filter((t, i, a) => a.indexOf(t) === i) });
         // search is a substring match that silently drops punctuation like ':' or "'" from the query, so "Star Trek: Picard"
         // finds nothing; retry with each title's longest punctuation-free run, then its longest word
         const longest = re => meta.titles.map(t => t.split(re).map(x => x.trim()).sort((a, b) => b.length - a.length)[0]);

@@ -1,4 +1,4 @@
-import { getJson, provider } from '../../shared/http.js';
+import { getJson, getText, provider } from '../../shared/http.js';
 import { getMeta } from '../../shared/tmdb.js';
 import { pickBest } from '../../shared/match.js';
 import { resolveEmbed } from '../../shared/extractors/index.js';
@@ -13,7 +13,10 @@ async function getStreams(tmdbId, mediaType, season, episode) {
         const isSeries = mediaType === 'tv';
         let hit = null;
         for (const q of meta.titles) {
-            const items = ((await api(`search/${encodeURIComponent(q)}?loader=searchPage`)).results || [])
+            // the search API sits behind a Cloudflare challenge, the search page renders the same results into bootstrapData
+            const html = await getText(`${BASE}/search/${encodeURIComponent(q)}`);
+            const data = JSON.parse((html.match(/window\.bootstrapData\s*=\s*(\{[\s\S]*?\});\s*<\/script>/) || [])[1] || '{}');
+            const items = ((((data.loaders || {}).searchPage) || {}).results || [])
                 .filter(r => r.model_type === 'title' && !!r.is_series === isSeries)
                 .map(r => ({ id: r.id, title: r.name, year: r.year, tmdb: String(r.tmdb_id) }));
             hit = items.find(i => i.tmdb === meta.tmdbId) || pickBest(items, meta);
@@ -23,7 +26,8 @@ async function getStreams(tmdbId, mediaType, season, episode) {
         const videos = isSeries
             ? ((await api(`titles/${hit.id}/seasons/${season}/episodes/${episode}?loader=episodePage`)).episode || {}).videos
             : (await api(`titles/${hit.id}?loader=titlePage`)).title.videos;
-        const full = (videos || []).filter(v => v.src && /^full$/i.test(v.category || ''));
+        // "Premium (No Ads)" links serve the master playlist but 403 every variant without a premium login
+        const full = (videos || []).filter(v => v.src && /^full$/i.test(v.category || '') && !/premium/i.test(v.name || ''));
         const lists = await Promise.all(full.map(async v => {
             const lang = (v.language || 'de').toUpperCase();
             // "stream" entries are the site's own direct HLS/MP4 links; everything else is a hoster embed
