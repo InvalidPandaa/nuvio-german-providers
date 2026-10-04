@@ -399,6 +399,17 @@ function pickSeries(items, meta, base) {
     return hits[0] || null;
   });
 }
+function splitSeasonPath(base, link, season, episode) {
+  return __async(this, null, function* () {
+    for (let s = season; ; s++) {
+      const html = yield getText(`${base}${link}/staffel-${s}`).catch(() => "");
+      const count = new Set(html.match(new RegExp(`${link}/staffel-${s}/episode-\\d+`, "g"))).size;
+      if (!count || s === season && episode <= count) return null;
+      if (episode <= count) return `${link}/staffel-${s}/episode-${episode}`;
+      episode -= count;
+    }
+  });
+}
 function bySlug(base, prefix, meta) {
   return __async(this, null, function* () {
     if (!meta.imdbId) return null;
@@ -420,19 +431,28 @@ function getStreams(tmdbId, mediaType, season, episode) {
       const meta = yield getMeta(tmdbId, mediaType);
       let series = null;
       for (const q of meta.titles) {
-        const $2 = load(yield getText(`${BASE}/suche?term=${encodeURIComponent(q)}&tab=shows`, { headers: { Referer: `${BASE}/suche` } }));
-        const items = all($2, "a.show-cover").map((a) => ({ link: a.attr("href"), title: $2("img", a).attr("alt") }));
+        const $ = load(yield getText(`${BASE}/suche?term=${encodeURIComponent(q)}&tab=shows`, { headers: { Referer: `${BASE}/suche` } }));
+        const items = all($, "a.show-cover").map((a) => ({ link: a.attr("href"), title: $("img", a).attr("alt") }));
         if (series = yield pickSeries(items, meta, BASE)) break;
       }
       series = series || (yield bySlug(BASE, "/serie/", meta));
       if (!series) return [];
-      const epUrl = `${BASE}${series.link}/staffel-${season}/episode-${episode}`;
-      const $ = load(yield getText(epUrl));
-      const links = all($, ".link-wrapper button").filter((b) => b.attr("data-provider-name") !== "Provider").map((b) => ({
-        url: b.attr("data-play-url"),
-        lang: b.attr("data-language-label"),
-        langId: b.attr("data-language-id")
-      }));
+      const episodePage = (path) => __async(null, null, function* () {
+        const epUrl2 = BASE + path;
+        const $ = load(yield getText(epUrl2).catch(() => ""));
+        const links2 = all($, ".link-wrapper button").filter((b) => b.attr("data-provider-name") !== "Provider").map((b) => ({
+          url: b.attr("data-play-url"),
+          lang: b.attr("data-language-label"),
+          langId: b.attr("data-language-id")
+        }));
+        return { epUrl: epUrl2, links: links2 };
+      });
+      let page = yield episodePage(`${series.link}/staffel-${season}/episode-${episode}`);
+      if (!page.links.length) {
+        const split = yield splitSeasonPath(BASE, series.link, season, episode);
+        if (split) page = yield episodePage(split);
+      }
+      const { epUrl, links } = page;
       for (const langId of ["1", "3", "2"]) {
         const out = yield Promise.all(links.filter((l) => l.langId === langId).map((l) => __async(null, null, function* () {
           const embed = yield followRedirect(BASE + l.url, epUrl).catch(() => null);

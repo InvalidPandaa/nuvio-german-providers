@@ -22,5 +22,19 @@ assert.deepStrictEqual(jwplayer('sources: [{file:"/v.mp4",label:"720p"}]', 'http
     const streams = await provider(async () => { send('https://slow.example'); throw new Error('early'); }).getStreams('1', 'movie');
     assert.deepStrictEqual(streams, []);
     assert.ok(finished, 'getStreams answered while a request was still running');
+
+    // TMDB counts Re:ZERO as one season of 85 episodes, the sites as four seasons of 25/25/16/19
+    esbuild.buildSync({ entryPoints: ['src/serienstream/common.js'], outfile: 'node_modules/.cache/check/common.js', bundle: true, format: 'cjs', platform: 'neutral' });
+    const { splitSeasonPath } = require('./node_modules/.cache/check/common.js');
+    globalThis.fetch = async url => {
+        const s = Number(url.match(/staffel-(\d+)$/)[1]);
+        const row = i => `<a href="/anime/stream/x/staffel-${s}/episode-${i + 1}">${i + 1}</a>`;
+        // every episode is linked twice (number and title column)
+        return { ok: true, text: async () => Array.from({ length: [25, 25, 16, 19][s - 1] || 0 }, (_, i) => row(i) + row(i)).join('') };
+    };
+    assert.strictEqual(await splitSeasonPath('https://a.example', '/anime/stream/x', 1, 78), '/anime/stream/x/staffel-4/episode-12');
+    assert.strictEqual(await splitSeasonPath('https://a.example', '/anime/stream/x', 2, 26), '/anime/stream/x/staffel-3/episode-1');
+    assert.strictEqual(await splitSeasonPath('https://a.example', '/anime/stream/x', 1, 5), null);
+    assert.strictEqual(await splitSeasonPath('https://a.example', '/anime/stream/x', 1, 999), null);
     console.log('check ok');
 })();

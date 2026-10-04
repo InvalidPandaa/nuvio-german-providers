@@ -18,6 +18,19 @@ export async function pickSeries(items, meta, base) {
     return hits[0] || null;
 }
 
+// TMDB lists many anime as one season with absolute numbering (Re:ZERO S1 E78) where both sites split them into
+// seasons (staffel-4/episode-12): walk the season pages from the requested one and subtract their episode counts.
+// null when the episode is in the requested season after all, or past the last season.
+export async function splitSeasonPath(base, link, season, episode) {
+    for (let s = season; ; s++) {
+        const html = await getText(`${base}${link}/staffel-${s}`).catch(() => '');
+        const count = new Set(html.match(new RegExp(`${link}/staffel-${s}/episode-\\d+`, 'g'))).size;
+        if (!count || (s === season && episode <= count)) return null;
+        if (episode <= count) return `${link}/staffel-${s}/episode-${episode}`;
+        episode -= count;
+    }
+}
+
 // both sites' search misses many exact titles (s.to has "Dark" only on result page 3), so guess the slug and verify via IMDb id
 export async function bySlug(base, prefix, meta) {
     if (!meta.imdbId) return null;

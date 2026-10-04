@@ -1,6 +1,6 @@
 {
   "name": "German Providers",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Deutsche Quellen für Nuvio – portiert von Bnyro/GermanProviders (CloudStream)",
   "author": "InvalidPandaa",
   "scrapers": [
@@ -153,7 +153,7 @@
       "id": "serienstream",
       "name": "Serienstream",
       "description": "Serien auf Deutsch und im Original von SerienStream (s.to)",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "filename": "providers/serienstream.js",
       "supportedTypes": [
         "tv"
@@ -171,7 +171,7 @@
       "id": "aniworld",
       "name": "Aniworld",
       "description": "Anime-Serien und -Filme auf Deutsch, mit deutschen oder englischen Untertiteln von AniWorld",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "filename": "providers/aniworld.js",
       "supportedTypes": [
         "tv",

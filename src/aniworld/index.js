@@ -3,7 +3,7 @@ import { getMeta } from '../../shared/tmdb.js';
 import { norm } from '../../shared/match.js';
 import { load, all } from '../../shared/dom.js';
 import { resolveEmbed } from '../../shared/extractors/index.js';
-import { bySlug, followRedirect, pickSeries } from '../serienstream/common.js';
+import { bySlug, followRedirect, pickSeries, splitSeasonPath } from '../serienstream/common.js';
 
 const BASE = 'https://aniworld.to';
 const LANG = { 1: 'Deutsch', 2: 'Eng-Sub', 3: 'Ger-Sub' };
@@ -30,13 +30,21 @@ async function findMovie(meta) {
     return null;
 }
 
+async function episodePage(path) {
+    const epUrl = BASE + path;
+    const $ = load(await getText(epUrl));
+    const links = all($, '.hosterSiteVideo ul li').map(li => ({
+        url: li.attr('data-link-target'), lang: li.attr('data-lang-key'),
+    })).filter(l => l.url);
+    return { epUrl, $, links };
+}
+
 async function getStreams(tmdbId, mediaType, season, episode) {
     try {
         const meta = await getMeta(tmdbId, mediaType);
-        let path = null;
+        let path = null, series = null;
         if (mediaType === 'movie') path = await findMovie(meta);
         else if (season != null && episode != null) {
-            let series = null;
             // the search wants short queries: 'Frieren: Beyond Journey's End' finds nothing, 'Frieren' does
             const queries = [].concat(...meta.titles.map(t => [t, t.split(/\s[-–:]\s|:\s/)[0]])).filter((q, i, a) => q.length > 3 && a.indexOf(q) === i);
             for (const q of queries) {
@@ -47,11 +55,13 @@ async function getStreams(tmdbId, mediaType, season, episode) {
             if (series) path = `${series.link}/staffel-${season}/episode-${episode}`;
         }
         if (!path) return [];
-        const epUrl = BASE + path;
-        const $ = load(await getText(epUrl));
-        const links = all($, '.hosterSiteVideo ul li').map(li => ({
-            url: li.attr('data-link-target'), lang: li.attr('data-lang-key'),
-        })).filter(l => l.url);
+        let page = await episodePage(path);
+        // an episode that does not exist answers 200 without hosters
+        if (!page.links.length && series) {
+            const split = await splitSeasonPath(BASE, series.link, season, episode);
+            if (split) page = await episodePage(split);
+        }
+        const { epUrl, $, links } = page;
         const out = await Promise.all(links.map(async l => {
             const embed = await followRedirect(BASE + l.url, epUrl).catch(() => null);
             const lang = LANG[l.lang] || $(`.changeLanguageBox img[data-lang-key="${l.lang}"]`).attr('title') || '';
