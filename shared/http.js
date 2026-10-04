@@ -3,7 +3,9 @@ export const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 
 // Nuvio on iOS closes the QuickJS runtime as soon as getStreams settles (or after its 60 s timeout); a fetch still
 // in flight at that moment aborts the whole app. So every request goes through send(), and provider() only
 // answers once none is running. After DEADLINE_MS no new request starts, to stay clear of Nuvio's timeout.
-const DEADLINE_MS = 40000;
+// Nuvio TV's fetch blocks, so a plugin's requests run one after the other and cannot be aborted, and it runs ten
+// plugins at a time: a slow one holds a slot the others wait for. The budget is what keeps that short.
+const DEADLINE_MS = 25000;
 let running = 0, idle = [], deadline = Infinity;
 
 export function send(url, opts) {

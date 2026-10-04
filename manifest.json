@@ -1,6 +1,6 @@
 {
   "name": "German Providers",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Deutsche Quellen für Nuvio – portiert von Bnyro/GermanProviders (CloudStream)",
   "author": "InvalidPandaa",
   "scrapers": [
@@ -8,7 +8,7 @@
       "id": "netzkino",
       "name": "Netzkino",
       "description": "Kostenlose Filme von Netzkino.de",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/netzkino.js",
       "supportedTypes": [
         "movie"
@@ -25,7 +25,7 @@
       "id": "ard",
       "name": "ARD Mediathek",
       "description": "Filme und Serien aus der ARD Mediathek – kostenlos, direkte HLS/MP4-Streams. FSK16+-Inhalte nur 22–6 Uhr.",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/ard.js",
       "supportedTypes": [
         "movie",
@@ -44,7 +44,7 @@
       "id": "plutotv",
       "name": "PlutoTV",
       "description": "Kostenlose Filme und Serien auf Abruf von Pluto TV (deutsche Region)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/plutotv.js",
       "supportedTypes": [
         "movie",
@@ -62,7 +62,7 @@
       "id": "arte",
       "name": "Arte",
       "description": "Filme und Serien aus der ARTE-Mediathek (deutsche Fassung, weitere Sprachversionen wie OmU gekennzeichnet)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/arte.js",
       "supportedTypes": [
         "movie",
@@ -80,7 +80,7 @@
       "id": "filmfrei24",
       "name": "FilmFrei24",
       "description": "Kostenlose Filme und Serien auf Deutsch von FilmFrei24 (direkte HLS/MP4-Streams)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/filmfrei24.js",
       "supportedTypes": [
         "movie",
@@ -99,7 +99,7 @@
       "id": "filmo",
       "name": "Filmo",
       "description": "Filme auf Deutsch von Filmo.to (VOE und weitere Hoster)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/filmo.js",
       "supportedTypes": [
         "movie"
@@ -117,7 +117,7 @@
       "id": "flixitv",
       "name": "FlixiTV",
       "description": "Klassische Filme und Serien auf Deutsch von FlixiTV (direkte MP4-Streams)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/flixitv.js",
       "supportedTypes": [
         "movie",
@@ -135,7 +135,7 @@
       "id": "serienstream",
       "name": "Serienstream",
       "description": "Serien auf Deutsch und im Original von SerienStream (s.to)",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "filename": "providers/serienstream.js",
       "supportedTypes": [
         "tv"
@@ -153,7 +153,7 @@
       "id": "aniworld",
       "name": "Aniworld",
       "description": "Anime-Serien und -Filme auf Deutsch, mit deutschen oder englischen Untertiteln von AniWorld",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "filename": "providers/aniworld.js",
       "supportedTypes": [
         "tv",
@@ -172,7 +172,7 @@
       "id": "dmax",
       "name": "DMAX",
       "description": "Doku-Serien aus der DMAX Mediathek – kostenlos, HLS ohne DRM",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/dmax.js",
       "supportedTypes": [
         "movie",
@@ -190,7 +190,7 @@
       "id": "tele5",
       "name": "TELE 5",
       "description": "Filme und Serien aus der TELE 5 Mediathek – kostenlos, HLS ohne DRM",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/tele5.js",
       "supportedTypes": [
         "movie",
@@ -208,7 +208,7 @@
       "id": "tlc",
       "name": "TLC",
       "description": "Reality- und Doku-Serien aus der TLC Mediathek – kostenlos, HLS ohne DRM",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/tlc.js",
       "supportedTypes": [
         "movie",
@@ -226,7 +226,7 @@
       "id": "southpark",
       "name": "South Park",
       "description": "Alle frei verfügbaren South-Park-Folgen von southpark.de – Deutsch und Englisch",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/southpark.js",
       "supportedTypes": [
         "tv"
@@ -244,7 +244,7 @@
       "id": "moflix",
       "name": "Moflix",
       "description": "Filme & Serien von moflix-stream.xyz (Deutsch, eigene HLS-Streams + Hoster)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/moflix.js",
       "supportedTypes": [
         "movie",
@@ -263,7 +263,7 @@
       "id": "huhuto",
       "name": "Huhu",
       "description": "Filme & Serien von huhu.to (Deutsch und weitere Sprachen, VOE u. a.)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/huhuto.js",
       "supportedTypes": [
         "movie",
@@ -282,7 +282,7 @@
       "id": "filmpalast",
       "name": "FilmPalast",
       "description": "Filme und Serien von Filmpalast.to (VOE, FireStream, Vidara, VidSonic)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/filmpalast.js",
       "supportedTypes": [
         "movie",
@@ -301,7 +301,7 @@
       "id": "megakino",
       "name": "Megakino",
       "description": "Filme und Serien von Megakino (Domain wird automatisch ermittelt)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/megakino.js",
       "supportedTypes": [
         "movie",
@@ -320,7 +320,7 @@
       "id": "hdfilme",
       "name": "HDFilme",
       "description": "Filme von HDFilme (über meinecloud.click, IMDb-basiert)",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/hdfilme.js",
       "supportedTypes": [
         "movie"
@@ -337,11 +337,10 @@
     {
       "id": "kinoking",
       "name": "KinoKing",
-      "description": "Filme und Serien auf Deutsch von KinoKing (VOE, Vidara, VidSonic u. a.)",
-      "version": "1.0.3",
+      "description": "Serien auf Deutsch von KinoKing (VOE, Vidara, VidSonic u. a.)",
+      "version": "1.0.5",
       "filename": "providers/kinoking.js",
       "supportedTypes": [
-        "movie",
         "tv"
       ],
       "contentLanguage": [
@@ -357,7 +356,7 @@
       "id": "kellerkino",
       "name": "KellerKino",
       "description": "Filme auf Deutsch von KellerKino",
-      "version": "1.0.3",
+      "version": "1.0.5",
       "filename": "providers/kellerkino.js",
       "supportedTypes": [
         "movie"

@@ -28,7 +28,8 @@ https://invalidpandaa.github.io/nuvio-german-providers/manifest.json
 | PlutoTV | Filme, Serien | Pluto zeigt nur wechselnde Teile einer Staffel |
 | South Park | Serie | nur frei verfügbare Folgen |
 | Netzkino | Filme | Suche der Netzkino-API ist lückenhaft |
-| FilmFrei24, Filmo, FlixiTV, KellerKino, KinoKing, Megakino, FilmPalast, HDFilme, Moflix, Huhu | Filme (teils Serien) | über Hoster wie VOE, Vidara, VidSonic, FireStream, MixDrop … |
+| FilmFrei24, Filmo, FlixiTV, KellerKino, Megakino, FilmPalast, HDFilme, Moflix, Huhu | Filme (teils Serien) | über Hoster wie VOE, Vidara, VidSonic, FireStream, MixDrop … |
+| KinoKing | Serien | Filme sind abgeschaltet: die Filmseite braucht 12–20 s pro Abruf |
 | Serienstream, Aniworld | Serien / Anime | s.to zeigt nach ~10 Links pro IP ein Captcha, dann fehlen weitere Links |
 
 

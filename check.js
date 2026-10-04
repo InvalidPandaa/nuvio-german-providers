@@ -3,7 +3,7 @@
 const assert = require('assert');
 const esbuild = require('esbuild');
 
-esbuild.buildSync({ entryPoints: ['shared/extractors/util.js', 'shared/http.js'], outdir: 'node_modules/.cache/check', bundle: true, format: 'cjs', platform: 'neutral', external: ['cheerio', 'crypto-js'] });
+esbuild.buildSync({ entryPoints: ['shared/extractors/util.js', 'shared/extractors/index.js', 'shared/http.js'], outdir: 'node_modules/.cache/check', bundle: true, format: 'cjs', platform: 'neutral', external: ['cheerio', 'crypto-js'] });
 const { unpack, jwplayer } = require('./node_modules/.cache/check/extractors/util.js');
 
 const packed = `<script>eval(function(p,a,c,k,e,d){while(c--)if(k[c])p=p.replace(new RegExp('\\\\b'+c.toString(a)+'\\\\b','g'),k[c]);return p}('0 1=\\'2\\';3.4({5:[{6:"7://8.9/a.b"}]})',12,12,'var|x|h\\u00e9llo|jwplayer|setup|sources|file|https|cdn|example|master|m3u8'.split('|'),0,{}))</script>`;
@@ -38,6 +38,14 @@ assert.deepStrictEqual(jwplayer('sources: [{file:"/v.mp4",label:"720p"}]', 'http
         'X · Japanisch, dt. UT · voe.sx', 'X · Englisch · voe.sx']);
     assert.deepStrictEqual(named.map(s => s.url.slice(-1)), ['5', '1', '2', '3', '4']);
     assert.strictEqual(named[2].title, 'voe.sx · Original, dt. UT');
+
+    // Dood only ever answers with a Cloudflare challenge, so it must not cost a request
+    let asked = 0;
+    globalThis.fetch = async () => { asked++; return { ok: false, status: 403 }; };
+    const { resolveEmbed } = require('./node_modules/.cache/check/extractors/index.js');
+    assert.deepStrictEqual(await resolveEmbed('https://dood.to/e/abc', 'https://x.example/'), []);
+    assert.deepStrictEqual(await resolveEmbed('//playmogo.com/e/abc', 'https://x.example/'), []);
+    assert.strictEqual(asked, 0);
 
     // TMDB counts Re:ZERO as one season of 85 episodes, the sites as four seasons of 25/25/16/19
     esbuild.buildSync({ entryPoints: ['src/serienstream/common.js'], outfile: 'node_modules/.cache/check/common.js', bundle: true, format: 'cjs', platform: 'neutral' });

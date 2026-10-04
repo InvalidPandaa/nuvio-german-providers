@@ -21,7 +21,7 @@ var __async = (__this, __arguments, generator) => {
 
 // shared/http.js
 var UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
-var DEADLINE_MS = 4e4;
+var DEADLINE_MS = 25e3;
 var running = 0;
 var idle = [];
 var deadline = Infinity;
@@ -364,7 +364,6 @@ function sniff(url, referer) {
 // shared/extractors/index.js
 var HOSTS = [
   [voe, ["voe.sx", "goofy-banana.com", "urochsunloath.com", "donaldlineelse.com", "charlestoughrace.com", "tubelessceliolymph.com", "simpulumlamerop.com", "nathanfromsubject.com", "yip.su", "metagnathtuggers.com"]],
-  [dood, ["dood", "d000d.com", "vide0.net", "dsvplay.com", "dooodster.com", "doods.pro", "playmogo.com", "d0000d.com", "ds2play.com", "doodstream.com"]],
   [vidstack, ["moflix.upns.xyz", "moflix.rpmplay.xyz"]],
   [supervideo, ["supervideo", "dropload", "abstream.to", "dr0pstream.com"]],
   [vidhidepro, ["vidhide", "filelions", "ryderjet.com", "moflix-stream.click", "smoothpre.com", "dhtpre.com", "peytonepre.com"]],
@@ -375,15 +374,18 @@ var HOSTS = [
   [vidoza, ["vidoza.net", "videzz.net"]],
   [streamtape, ["streamtape", "watchadsontape.com", "shavetape.cash"]]
 ];
+var BLOCKED = ["dood", "d000d.com", "vide0.net", "dsvplay.com", "dooodster.com", "doods.pro", "playmogo.com", "d0000d.com", "ds2play.com", "doodstream.com", "do7go.com"];
+var hostOf = (url) => (url.match(/^https?:\/\/(?:www\.)?([^/:?#]+)/i) || [])[1] || "";
+var listed = (host, names) => names.some((n) => host === n || !n.includes(".") && host.includes(n));
 function decoderFor(url) {
-  const host = (url.match(/^https?:\/\/(?:www\.)?([^/:?#]+)/i) || [])[1] || "";
-  const hit = HOSTS.find(([, names]) => names.some((n) => host === n || !n.includes(".") && host.includes(n)));
+  const hit = HOSTS.find(([, names]) => listed(hostOf(url), names));
   return hit ? hit[0] : sniff;
 }
 function resolveEmbed(url, referer) {
   return __async(this, null, function* () {
     if (!url) return [];
     if (url.startsWith("//")) url = "https:" + url;
+    if (listed(hostOf(url), BLOCKED)) return [];
     try {
       const host = url.split("/")[2].replace(/^www\./, "");
       return (yield decoderFor(url)(url, referer)).filter((s) => s.url).map((s) => Object.assign(s, { host }));

@@ -3,7 +3,6 @@ import * as h from './hosters.js';
 // host (without www.) -> decoder; mirrors from GermanProviders' extractor registrations + CloudStream core
 const HOSTS = [
     [h.voe, ['voe.sx', 'goofy-banana.com', 'urochsunloath.com', 'donaldlineelse.com', 'charlestoughrace.com', 'tubelessceliolymph.com', 'simpulumlamerop.com', 'nathanfromsubject.com', 'yip.su', 'metagnathtuggers.com']],
-    [h.dood, ['dood', 'd000d.com', 'vide0.net', 'dsvplay.com', 'dooodster.com', 'doods.pro', 'playmogo.com', 'd0000d.com', 'ds2play.com', 'doodstream.com']],
     [h.vidstack, ['moflix.upns.xyz', 'moflix.rpmplay.xyz']],
     [h.supervideo, ['supervideo', 'dropload', 'abstream.to', 'dr0pstream.com']],
     [h.vidhidepro, ['vidhide', 'filelions', 'ryderjet.com', 'moflix-stream.click', 'smoothpre.com', 'dhtpre.com', 'peytonepre.com']],
@@ -15,9 +14,15 @@ const HOSTS = [
     [h.streamtape, ['streamtape', 'watchadsontape.com', 'shavetape.cash']],
 ];
 
+// Dood answers every non-browser client with a Cloudflare challenge on all of these domains, so asking only costs a
+// request, and Nuvio TV runs a plugin's requests one after the other. Unknown Dood mirrors still go through sniff().
+const BLOCKED = ['dood', 'd000d.com', 'vide0.net', 'dsvplay.com', 'dooodster.com', 'doods.pro', 'playmogo.com', 'd0000d.com', 'ds2play.com', 'doodstream.com', 'do7go.com'];
+
+const hostOf = url => (url.match(/^https?:\/\/(?:www\.)?([^/:?#]+)/i) || [])[1] || '';
+const listed = (host, names) => names.some(n => host === n || (!n.includes('.') && host.includes(n)));
+
 export function decoderFor(url) {
-    const host = (url.match(/^https?:\/\/(?:www\.)?([^/:?#]+)/i) || [])[1] || '';
-    const hit = HOSTS.find(([, names]) => names.some(n => host === n || (!n.includes('.') && host.includes(n))));
+    const hit = HOSTS.find(([, names]) => listed(hostOf(url), names));
     return hit ? hit[0] : h.sniff;
 }
 
@@ -25,6 +30,7 @@ export function decoderFor(url) {
 export async function resolveEmbed(url, referer) {
     if (!url) return [];
     if (url.startsWith('//')) url = 'https:' + url;
+    if (listed(hostOf(url), BLOCKED)) return [];
     try {
         const host = url.split('/')[2].replace(/^www\./, '');
         return (await decoderFor(url)(url, referer)).filter(s => s.url).map(s => Object.assign(s, { host }));

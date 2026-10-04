@@ -21,7 +21,7 @@ var __async = (__this, __arguments, generator) => {
 
 // shared/http.js
 var UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
-var DEADLINE_MS = 4e4;
+var DEADLINE_MS = 25e3;
 var running = 0;
 var idle = [];
 var deadline = Infinity;
