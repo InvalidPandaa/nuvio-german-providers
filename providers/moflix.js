@@ -39,20 +39,28 @@ function send(url, opts) {
     throw err;
   });
 }
-var LANGS = [
-  [/ger-?sub/i, "Ger-Sub"],
-  [/eng-?sub/i, "Eng-Sub"],
+var SUBBED = [[/ger(man)?[\s._-]*sub|untertitel deutsch/i, "Original, dt. UT"], [/eng(lish)?[\s._-]*sub|untertitel englisch/i, "Original, engl. UT"]];
+var LANGS = [[/japanisch, dt\. ut/i, "Japanisch, dt. UT"], [/japanisch, engl\. ut/i, "Japanisch, engl. UT"]].concat(SUBBED, [
   [/\bomu\b/i, "OmU"],
   [/\bov\b/i, "OV"],
   [/englisch|\ben\b/i, "Englisch"],
   [/franz|\bfr\b/i, "Franz\xF6sisch"],
+  [/spanisch/i, "Spanisch"],
+  [/japanisch/i, "Japanisch"],
   [/deutsch|\bde\b/i, "Deutsch"]
-];
+]);
+var fileNames = {};
 function decorate(s) {
-  const lang = (LANGS.find(([re]) => re.test(s.title || "")) || [])[1] || "Deutsch";
+  const hit = LANGS.find(([re]) => re.test(s.title || ""));
+  let lang = hit ? hit[1] : "Deutsch", title = s.title;
+  const sub = SUBBED.find(([re]) => re.test(fileNames[s.url] || ""));
+  if (sub && !/UT|OmU/.test(lang)) {
+    lang = sub[1];
+    title = hit ? title.replace(hit[0], lang) : [title, lang].filter(Boolean).join(" \xB7 ");
+  }
   const quality2 = s.quality && s.quality !== "auto" ? s.quality : /\.m3u8|\/hls|master/i.test(s.url) ? "HLS" : "MP4";
   const host = ((s.title || "").split(" \xB7 ")[0].match(/^[\w-]+\.[a-z]{2,}$/) || [])[0];
-  return Object.assign({}, s, { name: [s.name, lang, host].filter(Boolean).join(" \xB7 "), quality: quality2 });
+  return { lang, stream: Object.assign({}, s, { name: [s.name, lang, host].filter(Boolean).join(" \xB7 "), title, quality: quality2 }) };
 }
 function provider(getStreams2) {
   return {
@@ -67,7 +75,8 @@ function provider(getStreams2) {
           console.error(e.message);
         }
         if (running) yield new Promise((resolve) => idle.push(resolve));
-        return streams.map(decorate);
+        const rank = (lang) => lang === "Deutsch" ? 0 : /dt\. UT|OmU/.test(lang) ? 1 : 2;
+        return streams.map(decorate).map((d, i) => [rank(d.lang), i, d.stream]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map((d) => d[2]);
       });
     }
   };
@@ -220,6 +229,8 @@ function voe(url, referer) {
     const out = [];
     if (data.source) out.push({ url: data.source, quality: "auto", headers });
     if (data.direct_access_url) out.push({ url: data.direct_access_url, quality: "auto", headers: { Referer: url } });
+    const file = (html.match(/<title>Watch ([^<|]*)/) || [])[1];
+    if (file) for (const s2 of out) fileNames[s2.url] = file;
     return out;
   });
 }

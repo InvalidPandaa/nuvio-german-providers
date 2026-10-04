@@ -6,7 +6,10 @@ import { resolveEmbed } from '../../shared/extractors/index.js';
 import { bySlug, followRedirect, pickSeries, splitSeasonPath } from '../serienstream/common.js';
 
 const BASE = 'https://aniworld.to';
-const LANG = { 1: 'Deutsch', 2: 'Eng-Sub', 3: 'Ger-Sub' };
+// data-lang-key as the site's language box names them: 1 Deutsch, 2 "mit Untertitel Englisch", 3 "mit Untertitel Deutsch"
+const LANG = { 1: 'Deutsch', 2: 'Japanisch, engl. UT', 3: 'Japanisch, dt. UT' };
+// German first: Nuvio TV runs a plugin's requests one after the other, so this is also the order they resolve in
+const ORDER = { 1: 0, 3: 1, 2: 2 };
 
 const clean = s => String(s || '').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&#0?39;/g, "'").replace(/&quot;/g, '"').trim();
 
@@ -35,7 +38,7 @@ async function episodePage(path) {
     const $ = load(await getText(epUrl));
     const links = all($, '.hosterSiteVideo ul li').map(li => ({
         url: li.attr('data-link-target'), lang: li.attr('data-lang-key'),
-    })).filter(l => l.url);
+    })).filter(l => l.url).sort((x, y) => (ORDER[x.lang] || 0) - (ORDER[y.lang] || 0));
     return { epUrl, $, links };
 }
 

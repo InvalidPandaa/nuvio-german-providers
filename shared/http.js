@@ -15,14 +15,27 @@ export function send(url, opts) {
 
 // Nuvio mobile/desktop show only `name` and `quality` (not `title`), Nuvio TV shows `name - quality` plus `title`,
 // so the language goes into the name and 'auto' becomes the stream format.
-const LANGS = [[/ger-?sub/i, 'Ger-Sub'], [/eng-?sub/i, 'Eng-Sub'], [/\bomu\b/i, 'OmU'], [/\bov\b/i, 'OV'],
-    [/englisch|\ben\b/i, 'Englisch'], [/franz|\bfr\b/i, 'Französisch'], [/deutsch|\bde\b/i, 'Deutsch']];
+const SUBBED = [[/ger(man)?[\s._-]*sub|untertitel deutsch/i, 'Original, dt. UT'], [/eng(lish)?[\s._-]*sub|untertitel englisch/i, 'Original, engl. UT']];
+const LANGS = [[/japanisch, dt\. ut/i, 'Japanisch, dt. UT'], [/japanisch, engl\. ut/i, 'Japanisch, engl. UT']].concat(SUBBED, [
+    [/\bomu\b/i, 'OmU'], [/\bov\b/i, 'OV'], [/englisch|\ben\b/i, 'Englisch'], [/franz|\bfr\b/i, 'Französisch'], [/spanisch/i, 'Spanisch'],
+    [/japanisch/i, 'Japanisch'], [/deutsch|\bde\b/i, 'Deutsch']]);
+
+// stream URL -> the hoster's file name, where the hoster shows one. Sites like huhu.to file "…GerSub.720p…" under plain
+// German, so a file name that says "subbed" beats a title that only says German.
+export const fileNames = {};
 
 function decorate(s) {
-    const lang = (LANGS.find(([re]) => re.test(s.title || '')) || [])[1] || 'Deutsch';
+    const hit = LANGS.find(([re]) => re.test(s.title || ''));
+    let lang = hit ? hit[1] : 'Deutsch', title = s.title;
+    const sub = SUBBED.find(([re]) => re.test(fileNames[s.url] || ''));
+    if (sub && !/UT|OmU/.test(lang)) {
+        lang = sub[1];
+        // Nuvio TV shows the title under the name, so it must not keep saying "Deutsch"
+        title = hit ? title.replace(hit[0], lang) : [title, lang].filter(Boolean).join(' · ');
+    }
     const quality = s.quality && s.quality !== 'auto' ? s.quality : (/\.m3u8|\/hls|master/i.test(s.url) ? 'HLS' : 'MP4');
     const host = ((s.title || '').split(' · ')[0].match(/^[\w-]+\.[a-z]{2,}$/) || [])[0];
-    return Object.assign({}, s, { name: [s.name, lang, host].filter(Boolean).join(' · '), quality });
+    return { lang, stream: Object.assign({}, s, { name: [s.name, lang, host].filter(Boolean).join(' · '), title, quality }) };
 }
 
 export function provider(getStreams) {
@@ -38,7 +51,9 @@ export function provider(getStreams) {
                 console.error(e.message);
             }
             if (running) await new Promise(resolve => idle.push(resolve));
-            return streams.map(decorate);
+            // German dub first, then German subtitles, then the rest; within a group the provider's own order stays
+            const rank = lang => (lang === 'Deutsch' ? 0 : /dt\. UT|OmU/.test(lang) ? 1 : 2);
+            return streams.map(decorate).map((d, i) => [rank(d.lang), i, d.stream]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(d => d[2]);
         },
     };
 }

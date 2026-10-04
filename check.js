@@ -23,6 +23,22 @@ assert.deepStrictEqual(jwplayer('sources: [{file:"/v.mp4",label:"720p"}]', 'http
     assert.deepStrictEqual(streams, []);
     assert.ok(finished, 'getStreams answered while a request was still running');
 
+    // German dub first, then German subtitles, then the rest; huhu.to files "…GerSub…" under plain German
+    const { fileNames } = require('./node_modules/.cache/check/http.js');
+    fileNames['https://v/2'] = 'KonoSuba E01 GerSub AC3 720p BluRay x264-Fuuko';
+    fileNames['https://v/5'] = 'KonoSuba E01 German AC3 720p BluRay x264-Fuuko';
+    const named = await provider(async () => [
+        { name: 'X', title: 'voe.sx · Ger-Sub', url: 'https://v/1' },
+        { name: 'X', title: 'voe.sx · DE', url: 'https://v/2' },
+        { name: 'X', title: 'voe.sx · Japanisch, dt. UT', url: 'https://v/3' },
+        { name: 'X', title: 'voe.sx · Englisch', url: 'https://v/4' },
+        { name: 'X', title: 'voe.sx · Deutsch', url: 'https://v/5' },
+    ]).getStreams('1', 'tv', 1, 1);
+    assert.deepStrictEqual(named.map(s => s.name), ['X · Deutsch · voe.sx', 'X · Original, dt. UT · voe.sx', 'X · Original, dt. UT · voe.sx',
+        'X · Japanisch, dt. UT · voe.sx', 'X · Englisch · voe.sx']);
+    assert.deepStrictEqual(named.map(s => s.url.slice(-1)), ['5', '1', '2', '3', '4']);
+    assert.strictEqual(named[2].title, 'voe.sx · Original, dt. UT');
+
     // TMDB counts Re:ZERO as one season of 85 episodes, the sites as four seasons of 25/25/16/19
     esbuild.buildSync({ entryPoints: ['src/serienstream/common.js'], outfile: 'node_modules/.cache/check/common.js', bundle: true, format: 'cjs', platform: 'neutral' });
     const { splitSeasonPath } = require('./node_modules/.cache/check/common.js');

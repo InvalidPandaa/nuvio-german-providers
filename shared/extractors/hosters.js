@@ -1,5 +1,5 @@
 // Ports of the CloudStream core extractors GermanProviders relies on. Each: (url, referer) -> [{url, quality, headers}]
-import { getJson, getText, postForm, postJson, UA, send } from '../http.js';
+import { getJson, getText, postForm, postJson, UA, send, fileNames } from '../http.js';
 import { fetchPage, jwplayer, origin, quality, scripts, unpack } from './util.js';
 
 const CryptoJS = require('crypto-js');
@@ -26,6 +26,9 @@ export async function voe(url, referer) {
     const out = [];
     if (data.source) out.push({ url: data.source, quality: 'auto', headers });
     if (data.direct_access_url) out.push({ url: data.direct_access_url, quality: 'auto', headers: { Referer: url } });
+    // "<title>Watch KonoSuba E01 GerSub AC3 720p BluRay x264-Fuuko - VOE | …" is the only place that tells dub from sub
+    const file = (html.match(/<title>Watch ([^<|]*)/) || [])[1];
+    if (file) for (const s of out) fileNames[s.url] = file;
     return out;
 }
 
