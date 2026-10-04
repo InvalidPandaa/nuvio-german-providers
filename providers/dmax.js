@@ -154,6 +154,8 @@ function aurora({ name, mainUrl, serviceIdentifier, mediathekSlug, apiTokenRealm
   const env = `filter%5Benvironment%5D=${serviceIdentifier}&v=2&include=default`;
   function findPage(meta) {
     return __async(this, null, function* () {
+      const parts = [].concat(...meta.titles.map((t) => t.split(/ [-–:] |: /))).map((p) => p.trim()).filter((p) => p.length > 3);
+      meta = Object.assign({}, meta, { titles: meta.titles.concat(parts).filter((t, i, a) => a.indexOf(t) === i) });
       const longest = (re) => meta.titles.map((t) => t.split(re).map((x) => x.trim()).sort((a, b) => b.length - a.length)[0]);
       const queries = meta.titles.concat(longest(/[^\wäöüß -]+/i), longest(/[^\wäöüß]+/i));
       for (const q of queries.filter((q2, i, a) => q2 && a.indexOf(q2) === i)) {

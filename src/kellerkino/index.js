@@ -1,4 +1,4 @@
-import { getText, provider } from '../../shared/http.js';
+import { getJson, getText, provider } from '../../shared/http.js';
 import { getMeta } from '../../shared/tmdb.js';
 import { pickBest } from '../../shared/match.js';
 import { load, all } from '../../shared/dom.js';
@@ -11,11 +11,11 @@ async function getStreams(tmdbId, mediaType) {
     try {
         const meta = await getMeta(tmdbId, mediaType);
         for (const q of meta.titles) {
-            const $ = load(await getText(`${BASE}/?s=${encodeURIComponent(q)}`));
-            const items = all($, 'article.movie-card').map(e => ({
-                title: e.find('h2').text().trim(),
-                url: e.find('h2 a').attr('href'),
-                year: (e.text().match(/\b(19|20)\d{2}\b/) || [])[0],
+            // the HTML search (?s=) sits behind a Cloudflare challenge, the WordPress REST search does not (no year, so exact titles only)
+            const results = await getJson(`${BASE}/wp-json/wp/v2/search?search=${encodeURIComponent(q)}&per_page=20`);
+            const items = results.filter(r => r.subtype === 'post').map(r => ({
+                title: String(r.title).replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n)).replace(/&amp;/g, '&'),
+                url: r.url,
             }));
             const hit = pickBest(items, meta);
             if (!hit) continue;

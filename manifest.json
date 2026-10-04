@@ -1,6 +1,6 @@
 {
   "name": "German Providers",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Deutsche Quellen für Nuvio – portiert von Bnyro/GermanProviders (CloudStream)",
   "author": "InvalidPandaa",
   "scrapers": [
@@ -190,7 +190,7 @@
       "id": "dmax",
       "name": "DMAX",
       "description": "Doku-Serien aus der DMAX Mediathek – kostenlos, HLS ohne DRM",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "filename": "providers/dmax.js",
       "supportedTypes": [
         "movie",
@@ -208,7 +208,7 @@
       "id": "tele5",
       "name": "TELE 5",
       "description": "Filme und Serien aus der TELE 5 Mediathek – kostenlos, HLS ohne DRM",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "filename": "providers/tele5.js",
       "supportedTypes": [
         "movie",
@@ -226,7 +226,7 @@
       "id": "tlc",
       "name": "TLC",
       "description": "Reality- und Doku-Serien aus der TLC Mediathek – kostenlos, HLS ohne DRM",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "filename": "providers/tlc.js",
       "supportedTypes": [
         "movie",
@@ -262,7 +262,7 @@
       "id": "moflix",
       "name": "Moflix",
       "description": "Filme & Serien von moflix-stream.xyz (Deutsch, eigene HLS-Streams + Hoster)",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "filename": "providers/moflix.js",
       "supportedTypes": [
         "movie",
@@ -394,7 +394,7 @@
       "id": "kellerkino",
       "name": "KellerKino",
       "description": "Filme auf Deutsch von KellerKino",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "filename": "providers/kellerkino.js",
       "supportedTypes": [
         "movie"

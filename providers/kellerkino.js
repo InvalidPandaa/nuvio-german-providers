@@ -405,11 +405,10 @@ function getStreams(tmdbId, mediaType) {
     try {
       const meta = yield getMeta(tmdbId, mediaType);
       for (const q of meta.titles) {
-        const $ = load(yield getText(`${BASE}/?s=${encodeURIComponent(q)}`));
-        const items = all($, "article.movie-card").map((e) => ({
-          title: e.find("h2").text().trim(),
-          url: e.find("h2 a").attr("href"),
-          year: (e.text().match(/\b(19|20)\d{2}\b/) || [])[0]
+        const results = yield getJson(`${BASE}/wp-json/wp/v2/search?search=${encodeURIComponent(q)}&per_page=20`);
+        const items = results.filter((r) => r.subtype === "post").map((r) => ({
+          title: String(r.title).replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n)).replace(/&amp;/g, "&"),
+          url: r.url
         }));
         const hit = pickBest(items, meta);
         if (!hit) continue;
