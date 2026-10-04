@@ -41,24 +41,6 @@
       "logo": "https://www.google.com/s2/favicons?domain=ardmediathek.de&sz=128"
     },
     {
-      "id": "welt",
-      "name": "Welt",
-      "description": "Dokumentationen und Reportagen aus der WELT-Mediathek (Einzeldokus, die auf TMDB als Film gelistet sind)",
-      "version": "1.0.3",
-      "filename": "providers/welt.js",
-      "supportedTypes": [
-        "movie"
-      ],
-      "contentLanguage": [
-        "de"
-      ],
-      "formats": [
-        "mp4",
-        "m3u8"
-      ],
-      "logo": "https://www.google.com/s2/favicons?domain=welt.de&sz=128"
-    },
-    {
       "id": "plutotv",
       "name": "PlutoTV",
       "description": "Kostenlose Filme und Serien auf Abruf von Pluto TV (deutsche Region)",
@@ -297,25 +279,6 @@
       "logo": "https://www.google.com/s2/favicons?domain=huhu.to&sz=128"
     },
     {
-      "id": "einschaltenin",
-      "name": "EinschaltenIn",
-      "description": "Filme von einschalten.in – nur Dood-Hoster, die meist hinter einem Cloudflare-Check liegen (daher standardmäßig aus)",
-      "version": "1.0.3",
-      "filename": "providers/einschaltenin.js",
-      "supportedTypes": [
-        "movie"
-      ],
-      "contentLanguage": [
-        "de"
-      ],
-      "formats": [
-        "mp4"
-      ],
-      "enabled": false,
-      "limited": true,
-      "logo": "https://www.google.com/s2/favicons?domain=einschalten.in&sz=128"
-    },
-    {
       "id": "filmpalast",
       "name": "FilmPalast",
       "description": "Filme und Serien von Filmpalast.to (VOE, FireStream, Vidara, VidSonic)",
@@ -407,111 +370,6 @@
         "mp4"
       ],
       "logo": "https://www.google.com/s2/favicons?domain=kellerkino.com&sz=128"
-    },
-    {
-      "id": "kinoger",
-      "name": "Kinoger",
-      "description": "Filme und Serien auf Deutsch von Kinoger – liegt hinter Cloudflare, funktioniert nur in Netzen ohne Browser-Check (daher standardmäßig aus)",
-      "version": "1.0.3",
-      "filename": "providers/kinoger.js",
-      "supportedTypes": [
-        "movie",
-        "tv"
-      ],
-      "contentLanguage": [
-        "de"
-      ],
-      "formats": [
-        "m3u8",
-        "mp4"
-      ],
-      "enabled": false,
-      "limited": true,
-      "logo": "https://www.google.com/s2/favicons?domain=kinoger.com&sz=128"
-    },
-    {
-      "id": "movie4k",
-      "name": "Movie4k",
-      "description": "Filme und Serien auf Deutsch von movie4k.sx (XCine-Netzwerk) – Backend war beim Portieren offline, daher standardmäßig aus",
-      "version": "1.0.3",
-      "filename": "providers/movie4k.js",
-      "supportedTypes": [
-        "movie",
-        "tv"
-      ],
-      "contentLanguage": [
-        "de"
-      ],
-      "formats": [
-        "mp4",
-        "m3u8"
-      ],
-      "enabled": false,
-      "limited": true,
-      "logo": "https://www.google.com/s2/favicons?domain=movie4k.sx&sz=128"
-    },
-    {
-      "id": "streamcloud",
-      "name": "Streamcloud",
-      "description": "Filme und Serien auf Deutsch von streamcloud.sx (XCine-Netzwerk) – Backend war beim Portieren offline, daher standardmäßig aus",
-      "version": "1.0.3",
-      "filename": "providers/streamcloud.js",
-      "supportedTypes": [
-        "movie",
-        "tv"
-      ],
-      "contentLanguage": [
-        "de"
-      ],
-      "formats": [
-        "mp4",
-        "m3u8"
-      ],
-      "enabled": false,
-      "limited": true,
-      "logo": "https://www.google.com/s2/favicons?domain=streamcloud.sx&sz=128"
-    },
-    {
-      "id": "kinokisteclub",
-      "name": "KinoKiste",
-      "description": "Filme und Serien auf Deutsch von kinokiste.club (XCine-Netzwerk) – Backend war beim Portieren offline, daher standardmäßig aus",
-      "version": "1.0.3",
-      "filename": "providers/kinokisteclub.js",
-      "supportedTypes": [
-        "movie",
-        "tv"
-      ],
-      "contentLanguage": [
-        "de"
-      ],
-      "formats": [
-        "mp4",
-        "m3u8"
-      ],
-      "enabled": false,
-      "limited": true,
-      "logo": "https://www.google.com/s2/favicons?domain=kinokiste.club&sz=128"
-    },
-    {
-      "id": "xcineru",
-      "name": "XcineRU",
-      "description": "Filme und Serien auf Deutsch von xcine.ru (XCine-Netzwerk) – Backend war beim Portieren offline, daher standardmäßig aus",
-      "version": "1.0.3",
-      "filename": "providers/xcineru.js",
-      "supportedTypes": [
-        "movie",
-        "tv"
-      ],
-      "contentLanguage": [
-        "de"
-      ],
-      "formats": [
-        "mp4",
-        "m3u8"
-      ],
-      "enabled": false,
-      "limited": true,
-      "logo": "https://www.google.com/s2/favicons?domain=xcine.ru&sz=128"
     }
   ]
 }

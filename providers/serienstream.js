@@ -331,13 +331,13 @@ function sniff(url, referer) {
 
 // shared/extractors/index.js
 var HOSTS = [
-  [voe, ["voe.sx", "kinoger.ru", "goofy-banana.com", "urochsunloath.com", "donaldlineelse.com", "charlestoughrace.com", "tubelessceliolymph.com", "simpulumlamerop.com", "nathanfromsubject.com", "yip.su", "metagnathtuggers.com"]],
+  [voe, ["voe.sx", "goofy-banana.com", "urochsunloath.com", "donaldlineelse.com", "charlestoughrace.com", "tubelessceliolymph.com", "simpulumlamerop.com", "nathanfromsubject.com", "yip.su", "metagnathtuggers.com"]],
   [dood, ["dood", "d000d.com", "vide0.net", "dsvplay.com", "dooodster.com", "doods.pro", "playmogo.com", "d0000d.com", "ds2play.com", "doodstream.com"]],
-  [vidstack, ["kinoger.re", "kinoger.p2pplay.pro", "moflix.upns.xyz", "moflix.rpmplay.xyz"]],
+  [vidstack, ["moflix.upns.xyz", "moflix.rpmplay.xyz"]],
   [supervideo, ["supervideo", "dropload", "abstream.to", "dr0pstream.com"]],
-  [vidhidepro, ["vidhide", "filelions", "ryderjet.com", "kinoger.be", "moflix-stream.click", "smoothpre.com", "dhtpre.com", "peytonepre.com"]],
+  [vidhidepro, ["vidhide", "filelions", "ryderjet.com", "moflix-stream.click", "smoothpre.com", "dhtpre.com", "peytonepre.com"]],
   [streamwish, ["streamwish", "luluvdo.com", "streamruby.com", "savefiles.com", "wishembed", "swdyu.com", "strwish"]],
-  [lulustream, ["lulustream.com", "luluvdoo.com", "kinoger.pw"]],
+  [lulustream, ["lulustream.com", "luluvdoo.com"]],
   [mixdrop, ["mixdrop", "mixdrp", "mxdrop", "mdy48tn97.com"]],
   [filemoon, ["filemoon"]],
   [vidoza, ["vidoza.net", "videzz.net"]],

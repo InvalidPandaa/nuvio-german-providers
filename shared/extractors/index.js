@@ -2,13 +2,13 @@ import * as h from './hosters.js';
 
 // host (without www.) -> decoder; mirrors from GermanProviders' extractor registrations + CloudStream core
 const HOSTS = [
-    [h.voe, ['voe.sx', 'kinoger.ru', 'goofy-banana.com', 'urochsunloath.com', 'donaldlineelse.com', 'charlestoughrace.com', 'tubelessceliolymph.com', 'simpulumlamerop.com', 'nathanfromsubject.com', 'yip.su', 'metagnathtuggers.com']],
+    [h.voe, ['voe.sx', 'goofy-banana.com', 'urochsunloath.com', 'donaldlineelse.com', 'charlestoughrace.com', 'tubelessceliolymph.com', 'simpulumlamerop.com', 'nathanfromsubject.com', 'yip.su', 'metagnathtuggers.com']],
     [h.dood, ['dood', 'd000d.com', 'vide0.net', 'dsvplay.com', 'dooodster.com', 'doods.pro', 'playmogo.com', 'd0000d.com', 'ds2play.com', 'doodstream.com']],
-    [h.vidstack, ['kinoger.re', 'kinoger.p2pplay.pro', 'moflix.upns.xyz', 'moflix.rpmplay.xyz']],
+    [h.vidstack, ['moflix.upns.xyz', 'moflix.rpmplay.xyz']],
     [h.supervideo, ['supervideo', 'dropload', 'abstream.to', 'dr0pstream.com']],
-    [h.vidhidepro, ['vidhide', 'filelions', 'ryderjet.com', 'kinoger.be', 'moflix-stream.click', 'smoothpre.com', 'dhtpre.com', 'peytonepre.com']],
+    [h.vidhidepro, ['vidhide', 'filelions', 'ryderjet.com', 'moflix-stream.click', 'smoothpre.com', 'dhtpre.com', 'peytonepre.com']],
     [h.streamwish, ['streamwish', 'luluvdo.com', 'streamruby.com', 'savefiles.com', 'wishembed', 'swdyu.com', 'strwish']],
-    [h.lulustream, ['lulustream.com', 'luluvdoo.com', 'kinoger.pw']],
+    [h.lulustream, ['lulustream.com', 'luluvdoo.com']],
     [h.mixdrop, ['mixdrop', 'mixdrp', 'mxdrop', 'mdy48tn97.com']],
     [h.filemoon, ['filemoon']],
     [h.vidoza, ['vidoza.net', 'videzz.net']],
