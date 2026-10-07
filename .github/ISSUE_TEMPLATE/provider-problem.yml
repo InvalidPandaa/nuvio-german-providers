@@ -7,30 +7,26 @@ body:
     attributes:
       label: Provider
       options:
-        - ARD Mediathek
-        - Arte
-        - DMAX
-        - TELE 5
-        - TLC
-        - PlutoTV
-        - South Park
         - Netzkino
-        - Welt
+        - ARD Mediathek
+        - PlutoTV
+        - Arte
         - FilmFrei24
         - Filmo
         - FlixiTV
-        - KellerKino
-        - KinoKing
-        - Megakino
-        - FilmPalast
-        - HDFilme
-        - Moflix
-        - Huhu
         - Serienstream
         - Aniworld
-        - Kinoger
-        - EinschaltenIn
-        - Movie4k / Streamcloud / KinoKiste / XcineRU
+        - DMAX
+        - TELE 5
+        - TLC
+        - South Park
+        - Moflix
+        - Huhu
+        - FilmPalast
+        - Megakino
+        - HDFilme
+        - KinoKing
+        - KellerKino
         - Mehrere / alle
     validations:
       required: true

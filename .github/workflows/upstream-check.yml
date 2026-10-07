@@ -9,12 +9,18 @@ permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: upstream-sync
+  cancel-in-progress: false
+
+env:
+  BRANCH: automation/upstream-sync
+
 jobs:
   upstream-sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Fetch upstream
@@ -22,42 +28,37 @@ jobs:
           git remote add upstream https://github.com/Bnyro/GermanProviders.git
           git fetch --no-tags upstream master
       - name: Detect and document upstream changes
-        id: report
         run: node scripts/upstream-report.js
-      - name: Check for changes
+      - name: Compare with the open sync branch
         id: changes
         run: |
-          if git diff --quiet -- UPSTREAM_UPDATE.md .upstream.json; then
+          # no report -> upstream is unchanged since .upstream.json
+          if [ ! -f UPSTREAM_UPDATE.md ]; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          # the report has no timestamp, so an identical report means nothing new since the last run
+          if git fetch --no-tags origin "$BRANCH" 2>/dev/null \
+             && git show "origin/$BRANCH:UPSTREAM_UPDATE.md" | cmp -s - UPSTREAM_UPDATE.md; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-      - name: Check for existing upstream PR
+      - name: Push report to the sync branch
         if: steps.changes.outputs.changed == 'true'
-        id: existing
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          count="$(gh pr list --repo "${{ github.repository }}" --head "automation/upstream-sync" --state open --json number --jq 'length')"
-          echo "exists=$count" >> "$GITHUB_OUTPUT"
-      - name: Create automation branch
-        if: steps.changes.outputs.changed == 'true' && steps.existing.outputs.exists == '0'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B automation/upstream-sync
+          git checkout -B "$BRANCH"
           git add UPSTREAM_UPDATE.md .upstream.json
           git commit -m "chore: document upstream GermanProviders changes"
-          git push --set-upstream origin automation/upstream-sync --force
-      - name: Create draft pull request
-        if: steps.changes.outputs.changed == 'true' && steps.existing.outputs.exists == '0'
+          git push --force --set-upstream origin "$BRANCH"
+      - name: Create or update the draft pull request
+        if: steps.changes.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr create \
-            --repo "${{ github.repository }}" \
-            --head automation/upstream-sync \
-            --base main \
-            --draft \
-            --title "chore: upstream GermanProviders update" \
-            --body-file UPSTREAM_UPDATE.md
+          number="$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --body-file UPSTREAM_UPDATE.md
+          else
+            gh pr create --head "$BRANCH" --base main --draft \
+              --title "chore: upstream GermanProviders update" --body-file UPSTREAM_UPDATE.md
+          fi

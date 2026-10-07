@@ -38,6 +38,25 @@ https://dennyswiesli-dev.github.io/nuvio-german-providers/manifest.json
 
 
 
+## Status
+
+Ein täglicher [Smoke-Test](.github/workflows/smoke.yml) ruft jeden Provider mit bekannten Titeln auf. Liefert ein Provider keine Streams mehr, öffnet der Workflow das Issue „Provider-Smoke-Test: Ausfälle" und schließt es wieder, sobald alles läuft. Den aktuellen Stand findest du im [Workflow-Verlauf](https://github.com/dennyswiesli-dev/nuvio-german-providers/actions/workflows/smoke.yml).
+
+## Entwicklung
+
+```bash
+npm ci
+npm run build        # src/<provider>/index.js -> providers/<provider>.js (die Bundles werden mit eingecheckt)
+npm test             # Offline-Selbsttest (check.js)
+npm run probe -- <provider> <tmdbId> <movie|tv> [staffel] [folge]   # echter Aufruf, braucht TMDB_API_KEY
+npm run bump -- patch   # Version in manifest.json und package.json setzen
+npm run meta         # Provider-Auswahl der Issue-Vorlage aus manifest.json erzeugen
+```
+
+Pull Requests prüfen, dass die eingecheckten Bundles zum Quellcode passen (`npm run build` vor dem Commit). Für den Smoke-Test muss im Repository das Secret `TMDB_API_KEY` gesetzt sein.
+
+Upstream-Änderungen von `Bnyro/GermanProviders` landen täglich als Draft-PR `automation/upstream-sync` mit einer Liste der betroffenen Dateien. Der PR wird bei neuen Upstream-Commits aktualisiert.
+
 ## Lizenz
 
 GPL-3.0-or-later. Seiten-Logik nach [Bnyro/GermanProviders](https://github.com/Bnyro/GermanProviders) (GPL-3.0),
