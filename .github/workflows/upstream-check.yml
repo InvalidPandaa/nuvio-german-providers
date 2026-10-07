@@ -1,0 +1,92 @@
+name: Check upstream GermanProviders
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Get upstream commit
+        id: upstream
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          sha="$(gh api repos/Bnyro/GermanProviders/commits/master --jq '.sha')"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Compare with last known upstream commit
+        id: compare
+        env:
+          UPSTREAM_SHA: ${{ steps.upstream.outputs.sha }}
+        run: |
+          set -euo pipefail
+          known="$(node -p "require('./.upstream.json').commit")"
+          echo "known=$known"
+          echo "current=$UPSTREAM_SHA"
+          if [ "$known" = "$UPSTREAM_SHA" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create upstream update issue
+        if: steps.compare.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPSTREAM_SHA: ${{ steps.upstream.outputs.sha }}
+        run: |
+          set -euo pipefail
+          known="$(node -p "require('./.upstream.json').commit")"
+          title="Upstream update: Bnyro/GermanProviders"
+          body="## Upstream update detected
+
+          The upstream repository **Bnyro/GermanProviders** has changed.
+
+          - Previous tracked commit: $known
+          - Current upstream commit: $UPSTREAM_SHA
+          - Compare: https://github.com/Bnyro/GermanProviders/compare/$known...$UPSTREAM_SHA
+
+          ### Important
+          This workflow deliberately does **not** overwrite the Nuvio JavaScript providers automatically. The CloudStream providers and the Nuvio providers are different implementations, so the changed providers need a semantic review/port.
+
+          Please review the upstream diff and update the corresponding files under `src/` if required."
+
+          if gh issue list --state open --search "Upstream update: Bnyro/GermanProviders in:title" --json title --jq 'length' | grep -q '^0$'; then
+            gh issue create --title "$title" --body "$body" --label "upstream"
+          else
+            echo "An upstream update issue is already open."
+          fi
+
+      - name: Record upstream commit
+        if: steps.compare.outputs.changed == 'true'
+        env:
+          UPSTREAM_SHA: ${{ steps.upstream.outputs.sha }}
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const fs = require('fs');
+          const current = JSON.parse(fs.readFileSync('.upstream.json', 'utf8'));
+          current.commit = process.env.UPSTREAM_SHA;
+          current.checkedAt = new Date().toISOString();
+          fs.writeFileSync('.upstream.json', JSON.stringify(current, null, 2) + '\n');
+          NODE
+
+      - name: Commit upstream state
+        if: steps.compare.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .upstream.json
+          git commit -m "chore: record upstream GermanProviders update"
+          git push
