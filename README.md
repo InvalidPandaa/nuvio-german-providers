@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > Dieses Projekt ist noch in Entwicklung. Einzelne Provider können ausfallen, weil sich die Seiten oder Hoster ändern.
-> Wenn etwas nicht funktioniert, [öffne gerne ein Issue](https://github.com/InvalidPandaa/nuvio-german-providers/issues/new/choose).
+> Wenn etwas nicht funktioniert, [öffne gerne ein Issue](https://github.com/dennyswiesli-dev/nuvio-german-providers/issues/new).
 
 Deutsche Quellen für [Nuvio](https://github.com/NuvioMedia), portiert aus dem CloudStream-Repo
 [Bnyro/GermanProviders](https://github.com/Bnyro/GermanProviders). Anders als die CloudStream-`.cs3`-Erweiterungen
@@ -14,7 +14,7 @@ auf allen Plattformen: Android, Android TV, iOS, macOS, Windows.
 In Nuvio in den Plugin-Einstellungen ein Repository mit der **rohen** URL der `manifest.json` hinzufügen:
 
 ```
-https://invalidpandaa.github.io/nuvio-german-providers/manifest.json
+https://dennyswiesli-dev.github.io/nuvio-german-providers/manifest.json
 ```
 
 
