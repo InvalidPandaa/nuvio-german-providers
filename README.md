@@ -1,5 +1,9 @@
 # German Providers für Nuvio
 
+## Eigenständige Nuvio-Portierung
+
+Dieses Repository ist ein Fork der Arbeit von `InvalidPandaa/nuvio-german-providers` und wird von Dennys Wiesli eigenständig für Nuvio weitergeführt. Die zugrunde liegende Provider-Logik stammt aus `Bnyro/GermanProviders`. Änderungen am CloudStream-Original werden regelmäßig überwacht; aufgrund der unterschiedlichen Implementierungen werden sie nicht blind in JavaScript überschrieben, sondern als Upstream-Update zur Prüfung gemeldet.
+
 > [!WARNING]
 > Dieses Projekt ist noch in Entwicklung. Einzelne Provider können ausfallen, weil sich die Seiten oder Hoster ändern.
 > Wenn etwas nicht funktioniert, [öffne gerne ein Issue](https://github.com/dennyswiesli-dev/nuvio-german-providers/issues/new).
