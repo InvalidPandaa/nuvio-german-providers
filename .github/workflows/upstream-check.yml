@@ -63,7 +63,7 @@ jobs:
           Please review the upstream diff and update the corresponding files under `src/` if required."
 
           if gh issue list --state open --search "Upstream update: Bnyro/GermanProviders in:title" --json title --jq 'length' | grep -q '^0$'; then
-            gh issue create --title "$title" --body "$body" --label "upstream"
+            gh issue create --title "$title" --body "$body"
           else
             echo "An upstream update issue is already open."
           fi
