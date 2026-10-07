@@ -1,23 +1,303 @@
 {
-  "_comment": "Per provider: candidate titles; one candidate returning streams is enough. Mediathek and TV-channel providers only carry changing content, so they list several.",
-  "netzkino": [{ "type": "movie", "tmdbId": 603 }, { "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 680 }],
-  "ard": [{ "type": "movie", "tmdbId": 550 }, { "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }, { "type": "tv", "tmdbId": 2190, "season": 1, "episode": 1 }],
-  "plutotv": [{ "type": "movie", "tmdbId": 603 }, { "type": "tv", "tmdbId": 456, "season": 1, "episode": 1 }, { "type": "tv", "tmdbId": 1668, "season": 1, "episode": 1 }],
-  "arte": [{ "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 603 }, { "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }],
-  "filmfrei24": [{ "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 603 }],
-  "filmo": [{ "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 603 }],
-  "flixitv": [{ "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 603 }],
-  "serienstream": [{ "type": "tv", "tmdbId": 1396, "season": 1, "episode": 2 }, { "type": "tv", "tmdbId": 1668, "season": 1, "episode": 1 }],
-  "aniworld": [{ "type": "tv", "tmdbId": 46260, "season": 1, "episode": 1 }, { "type": "tv", "tmdbId": 31911, "season": 1, "episode": 1 }],
-  "dmax": [{ "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }, { "type": "movie", "tmdbId": 550 }],
-  "tele5": [{ "type": "movie", "tmdbId": 550 }, { "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }],
-  "tlc": [{ "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }, { "type": "movie", "tmdbId": 550 }],
-  "southpark": [{ "type": "tv", "tmdbId": 2190, "season": 1, "episode": 1 }, { "type": "tv", "tmdbId": 2190, "season": 5, "episode": 1 }],
-  "moflix": [{ "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 603 }, { "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }],
-  "huhuto": [{ "type": "movie", "tmdbId": 550 }, { "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }],
-  "filmpalast": [{ "type": "movie", "tmdbId": 550 }, { "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }],
-  "megakino": [{ "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 603 }],
-  "hdfilme": [{ "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 603 }],
-  "kinoking": [{ "type": "tv", "tmdbId": 1396, "season": 1, "episode": 1 }, { "type": "tv", "tmdbId": 1668, "season": 1, "episode": 1 }],
-  "kellerkino": [{ "type": "movie", "tmdbId": 550 }, { "type": "movie", "tmdbId": 603 }]
+  "_comment": "Per provider: candidate titles (one returning streams is enough). 'optional': the site's catalog changes or is region-locked, so no hit is shown as a note and never opens a failure issue. 'timeout' is in seconds.",
+  "netzkino": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 603
+      },
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 680
+      }
+    ],
+    "optional": true
+  },
+  "ard": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      },
+      {
+        "type": "tv",
+        "tmdbId": 2190,
+        "season": 1,
+        "episode": 1
+      }
+    ],
+    "optional": true
+  },
+  "plutotv": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 603
+      },
+      {
+        "type": "tv",
+        "tmdbId": 456,
+        "season": 1,
+        "episode": 1
+      },
+      {
+        "type": "tv",
+        "tmdbId": 1668,
+        "season": 1,
+        "episode": 1
+      }
+    ],
+    "optional": true
+  },
+  "arte": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 603
+      },
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      }
+    ],
+    "optional": true
+  },
+  "filmfrei24": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 603
+      }
+    ]
+  },
+  "filmo": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 603
+      }
+    ]
+  },
+  "flixitv": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 603
+      }
+    ]
+  },
+  "serienstream": {
+    "candidates": [
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 2
+      },
+      {
+        "type": "tv",
+        "tmdbId": 1668,
+        "season": 1,
+        "episode": 1
+      }
+    ]
+  },
+  "aniworld": {
+    "candidates": [
+      {
+        "type": "tv",
+        "tmdbId": 46260,
+        "season": 1,
+        "episode": 1
+      },
+      {
+        "type": "tv",
+        "tmdbId": 31911,
+        "season": 1,
+        "episode": 1
+      }
+    ]
+  },
+  "dmax": {
+    "candidates": [
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      },
+      {
+        "type": "movie",
+        "tmdbId": 550
+      }
+    ],
+    "optional": true
+  },
+  "tele5": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      }
+    ],
+    "optional": true
+  },
+  "tlc": {
+    "candidates": [
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      },
+      {
+        "type": "movie",
+        "tmdbId": 550
+      }
+    ],
+    "optional": true
+  },
+  "southpark": {
+    "candidates": [
+      {
+        "type": "tv",
+        "tmdbId": 2190,
+        "season": 1,
+        "episode": 1
+      },
+      {
+        "type": "tv",
+        "tmdbId": 2190,
+        "season": 5,
+        "episode": 1
+      }
+    ],
+    "optional": true
+  },
+  "moflix": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 603
+      },
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      }
+    ]
+  },
+  "huhuto": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      }
+    ]
+  },
+  "filmpalast": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      }
+    ]
+  },
+  "megakino": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 603
+      }
+    ]
+  },
+  "hdfilme": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 603
+      }
+    ]
+  },
+  "kinoking": {
+    "candidates": [
+      {
+        "type": "tv",
+        "tmdbId": 1396,
+        "season": 1,
+        "episode": 1
+      }
+    ]
+  },
+  "kellerkino": {
+    "candidates": [
+      {
+        "type": "movie",
+        "tmdbId": 550
+      },
+      {
+        "type": "movie",
+        "tmdbId": 603
+      }
+    ]
+  }
 }
